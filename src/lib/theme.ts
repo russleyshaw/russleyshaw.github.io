@@ -21,12 +21,15 @@ export function withSystemTheme(onChange: (isDarkMode: boolean) => void): boolea
     return isSystemDarkMode;
 }
 
-export function useDarkModeClasses(isDarkMode: boolean) {
+export function useDarkMode(isDarkMode: boolean) {
     useEffect(() => {
         if (isDarkMode) {
             document.body.classList.add(Classes.DARK);
+            document.body.setAttribute("data-theme", "dark");
             document.getElementById("root")?.classList.add(Classes.DARK);
+            
         } else {
+            document.body.setAttribute("data-theme", "light");
             document.body.classList.remove(Classes.DARK);
             document.getElementById("root")?.classList.remove(Classes.DARK);
         }

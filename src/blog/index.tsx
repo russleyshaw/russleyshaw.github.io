@@ -1,4 +1,4 @@
-import React, { LazyExoticComponent, lazy } from "react";
+import { LazyExoticComponent, lazy } from "react";
 
 export interface BlogMeta {
     title: string;
@@ -14,12 +14,12 @@ export interface BlogPost extends BlogMeta {
 
 export const BLOG_POSTS: BlogPost[] = [
     {
-        title: "Head Tail",
+        title: "Undefined Element Access",
         date: "2023-9-30",
-        tags: ["head", "tail", "command line"],
+        tags: ["TypeScript", "Arrays"],
 
-        slug: "head-tail",
-        description: "A simple head-tail command line utility",
+        slug: "hidden-index-undefineds",
+        description: "Accessing first/last/rest elements and destructuring in Typescript can introduce hidden undefineds.",
         lazy: lazy(() => import("./head-tail.js")),
     },
 ];

@@ -1,17 +1,19 @@
 import { observer } from "mobx-react";
 
 import hljs from "highlight.js";
-import "highlight.js/styles/github-dark-dimmed.css";
+import "../highlight.scss";
 
 import { useCallback, useMemo, useState } from "react";
 import { css, styled } from "styled-components";
 import { trimLines } from "../lib/string";
 import { Button } from "@blueprintjs/core";
+import { OpenInPlayground } from "./OpenInPlayground";
 
 export interface CodeBlockProps {
     filename?: string;
     language?: string;
     code: string;
+    
     minimal?: boolean;
 }
 
@@ -29,10 +31,11 @@ const RootDiv = styled.div<{ minimal?: boolean }>`
 
     position: relative;
 
-    padding: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.5);
+    padding: 0.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.1);
     border-radius: 0.5rem;
+    font-family: "Fira Code", monospace;
 
     ${p => p.minimal && MinimalRootDivCss}
 `;
@@ -45,6 +48,10 @@ const ActionsDiv = styled.div`
     margin-right: -0.5rem;
 
     transform: translateX(100%);
+
+    display: flex;
+    flex-direction: column;
+    align-items: start;
 `;
 
 const CodeDiv = styled.div<{ minimal?: boolean }>`
@@ -61,18 +68,21 @@ export const CodeBlock = observer((props: CodeBlockProps) => {
 
     const { code, language = "typescript", minimal } = props;
 
+    const trimmedCode = useMemo(() => trimLines(code), [code]);
     const highlighted = useMemo(() => {
-        return hljs.highlight(language, trimLines(code)).value;
-    }, [code, language]);
+        return hljs.highlight(language, trimmedCode).value;
+    }, [trimmedCode, language]);
 
     const onCopyClick = useCallback(() => {
-        navigator.clipboard.writeText(code);
+        navigator.clipboard.writeText(trimmedCode);
         setCopied(true);
 
         setTimeout(() => {
             setCopied(false);
         }, 5000);
-    }, [code]);
+    }, [trimmedCode]);
+
+    const showOpenInPlayground = language === "ts" || language === "typescript";
 
     return (
         <RootDiv minimal={minimal}>
@@ -82,8 +92,10 @@ export const CodeBlock = observer((props: CodeBlockProps) => {
                         minimal
                         small
                         onClick={onCopyClick}
+                        icon="clipboard"
                         text={copied ? "Copied!" : "Copy"}
                     />
+                    {showOpenInPlayground && <OpenInPlayground minimal code={trimmedCode} />}
                 </ActionsDiv>
             )}
             <CodeDiv minimal={minimal}>

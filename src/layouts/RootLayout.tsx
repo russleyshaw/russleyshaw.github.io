@@ -5,7 +5,7 @@ import { Navbar } from "../partials/Navbar";
 import { SettingsDrawer } from "../partials/SettingsDrawer";
 import { AppSettings, AppSettingsContext } from "../models/app_settings";
 import { useState } from "react";
-import { useDarkModeClasses } from "../lib/theme";
+import { useDarkMode } from "../lib/theme";
 
 const DARK_MODE_CSS = css`
     background-color: #2f343c;
@@ -28,6 +28,11 @@ const GlobalStyle = createGlobalStyle`
         padding: 0;
     }
 
+    code, pre {
+        padding: 0;
+        margin: 0;
+    }
+
 `;
 
 const RootDiv = styled.div`
@@ -44,7 +49,7 @@ export const RootLayout = observer(() => {
         isDarkMode: appSettings.isDarkMode,
     };
 
-    useDarkModeClasses(appSettings.isDarkMode);
+    useDarkMode(appSettings.isDarkMode);
 
     return (
         <AppSettingsContext.Provider value={appSettings}>

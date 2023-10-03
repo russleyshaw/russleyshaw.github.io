@@ -5,8 +5,8 @@ import { trimLines } from "../lib/string";
 import styled from "styled-components";
 
 interface CodeProps {
-    code: string;
-    language?: string;
+    c: string;
+    lang?: string;
 }
 
 const Code = styled.code`
@@ -20,7 +20,7 @@ const Code = styled.code`
 `;
 
 export default observer((props: CodeProps) => {
-    const { code, language = "ts" } = props;
+    const { c: code, lang: language = "ts" } = props;
     const highlighted = useMemo(() => {
         return hljs.highlight(language, trimLines(code)).value;
     }, [code, language]);
