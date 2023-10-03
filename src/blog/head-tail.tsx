@@ -1,3 +1,4 @@
+import Code from "../components/Code";
 import { CodeBlock } from "../components/CodeBlock";
 
 export default function HeadTailPost() {
@@ -9,8 +10,9 @@ export default function HeadTailPost() {
                 issue encountered in Partcaster was we were expecting a first element and captured
                 the rest in a seperate value
             </p>
-            <code>{`const [first, ...rest] = values;`}</code>
-            However, in this case values was <code>{`[]`}</code> so first was undefined and rest was{" "}
+            <Code code="const [first, ...rest] = values;" />
+            <p></p>
+            However, in this case values was <Code code="[]" /> so first was undefined and rest was{" "}
             <code>{`[]`}</code>. To prevent this, write a simple getHeadTail() function that treats
             the first element as undefined.
             <CodeBlock

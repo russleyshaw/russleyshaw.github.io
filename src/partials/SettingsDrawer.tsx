@@ -7,8 +7,6 @@ import { useClosingDelay } from "../lib/react";
 import { useBoolSearchParam } from "../lib/router";
 import { useAppSettings } from "../models/app_settings";
 import { QueryParamKey } from "../router";
-import { useIsChangelogOpen } from "./ChangelogDialog";
-import { useIsEulaOpen } from "./EulaDialog";
 
 const RootDiv = styled.div`
     display: flex;
@@ -25,9 +23,6 @@ export const SettingsDrawer = observer(() => {
     const [isOpen, setIsOpen] = useIsSettingsDrawerOpen();
     const isVisible = useClosingDelay(isOpen);
 
-    const [, setIsChangelogOpen] = useIsChangelogOpen();
-    const [, setIsEulaOpen] = useIsEulaOpen();
-
     if (!isVisible) {
         return null;
     }
@@ -40,14 +35,6 @@ export const SettingsDrawer = observer(() => {
                     theme={appSettings.theme.value}
                     setTheme={appSettings.setTheme}
                 />
-
-                {SHOW_EULA && <Button text="EULA" onClick={() => setIsEulaOpen(true)} />}
-                {SHOW_CHANGELOG && (
-                    <Button
-                        text={`Changelog v${APP_VERSION}`}
-                        onClick={() => setIsChangelogOpen(true)}
-                    />
-                )}
             </RootDiv>
         </Drawer>
     );

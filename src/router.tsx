@@ -3,6 +3,7 @@ import { RootLayout } from "./layouts/RootLayout";
 import { HomePage } from "./pages/HomePage";
 import { BLOG_POSTS, linkFromSlug } from "./blog";
 import React from "react";
+import { PostPage } from "./pages/PostPage";
 
 export enum QueryParamKey {
     EULA_DIALOG = "eulaDg",
@@ -23,9 +24,11 @@ export function createRouter() {
                     (post): RouteObject => ({
                         path: linkFromSlug(post.slug),
                         element: (
-                            <React.Suspense fallback="Loading...">
-                                <post.lazy />
-                            </React.Suspense>
+                            <PostPage meta={post}>
+                                <React.Suspense fallback="Loading...">
+                                    <post.lazy />
+                                </React.Suspense>
+                            </PostPage>
                         ),
                     }),
                 ),

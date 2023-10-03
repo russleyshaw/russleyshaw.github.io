@@ -5,11 +5,7 @@ import { Navbar } from "../partials/Navbar";
 import { SettingsDrawer } from "../partials/SettingsDrawer";
 import { AppSettings, AppSettingsContext } from "../models/app_settings";
 import { useState } from "react";
-import { ChangelogDialog } from "../partials/ChangelogDialog";
-import { EulaDialog } from "../partials/EulaDialog";
-
 import { useDarkModeClasses } from "../lib/theme";
-import { SHOW_CHANGELOG, SHOW_EULA } from "../config";
 
 const DARK_MODE_CSS = css`
     background-color: #2f343c;
@@ -58,8 +54,6 @@ export const RootLayout = observer(() => {
                     <Navbar />
                     <Outlet />
                     <SettingsDrawer />
-                    {SHOW_CHANGELOG && <ChangelogDialog />}
-                    {SHOW_EULA && <EulaDialog />}
                 </RootDiv>
             </ThemeProvider>
         </AppSettingsContext.Provider>

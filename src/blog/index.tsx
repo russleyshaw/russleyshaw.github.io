@@ -1,18 +1,21 @@
-import { LazyExoticComponent, lazy } from "react";
+import React, { LazyExoticComponent, lazy } from "react";
 
-interface BlogPost {
+export interface BlogMeta {
     title: string;
     date: string;
     description: string;
     tags: string[];
     slug: string;
+}
+
+export interface BlogPost extends BlogMeta {
     lazy: LazyExoticComponent<() => JSX.Element>;
 }
 
 export const BLOG_POSTS: BlogPost[] = [
     {
         title: "Head Tail",
-        date: "2021-04-01",
+        date: "2023-9-30",
         tags: ["head", "tail", "command line"],
 
         slug: "head-tail",
