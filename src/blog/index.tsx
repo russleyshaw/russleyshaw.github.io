@@ -1,5 +1,4 @@
 import { LazyExoticComponent, lazy } from "react";
-import { LazyRouteFunction } from "react-router-dom";
 
 interface BlogPost {
     title: string;

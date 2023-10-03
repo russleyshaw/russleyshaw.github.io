@@ -6,7 +6,7 @@ import "highlight.js/styles/github-dark-dimmed.css";
 import { useCallback, useMemo, useState } from "react";
 import { css, styled } from "styled-components";
 import { trimLines } from "../lib/string";
-import { Button, Card } from "@blueprintjs/core";
+import { Button } from "@blueprintjs/core";
 
 export interface CodeBlockProps {
     filename?: string;

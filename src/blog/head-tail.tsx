@@ -1,5 +1,4 @@
 import { CodeBlock } from "../components/CodeBlock";
-import { makeBlogPost } from "../lib/blog";
 
 export default function HeadTailPost() {
     return (
