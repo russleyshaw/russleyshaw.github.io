@@ -5,6 +5,8 @@ import styled from "styled-components";
 import { formatDistanceToNow } from "date-fns";
 import { Tag } from "@blueprintjs/core";
 import { useCallback } from "react";
+import { useTitle } from "../lib/react";
+import { APP_DISPLAY_NAME } from "../config";
 
 const RootDiv = styled.div`
     width: 600px;
@@ -21,11 +23,13 @@ const PostsDiv = styled.div`
 `;
 
 export const HomePage = observer(() => {
+    useTitle(`Home | ${APP_DISPLAY_NAME}`);
+
     return (
         <RootDiv>
             <PostsDiv>
                 {BLOG_POSTS.map(post => (
-                    <PostEntry post={post}/>
+                    <PostEntry post={post} />
                 ))}
             </PostsDiv>
         </RootDiv>
@@ -35,8 +39,9 @@ export const HomePage = observer(() => {
 const PostEntryDiv = styled.div`
     display: grid;
 
-    grid-template: "title tags" auto 
-    "description date" auto / 1fr auto;
+    grid-template:
+        "title tags" auto
+        "description date" auto / 1fr auto;
     gap: 0.5em;
 
     background-color: rgba(0, 0, 0, 0.1);
@@ -50,14 +55,12 @@ const PostEntryDiv = styled.div`
 `;
 
 const PostEntryTitle = styled.h3`
-grid-area: title
+    grid-area: title;
 `;
 
-
 const PostEntryDescription = styled.span`
-grid-area: description;
+    grid-area: description;
     font-size: 0.9em;
-
 `;
 
 const PostEntryTags = styled.div`
@@ -70,11 +73,11 @@ const PostEntryTags = styled.div`
 
 const PostEntryDate = styled.span`
     grid-area: date;
-    justify-self: end
+    justify-self: end;
 `;
 
-const PostEntry = observer((props: {post: BlogPost}) => {
-    const {post} = props;
+const PostEntry = observer((props: { post: BlogPost }) => {
+    const { post } = props;
 
     const navigate = useNavigate();
     const onClick = useCallback(() => {
@@ -83,15 +86,17 @@ const PostEntry = observer((props: {post: BlogPost}) => {
     }, [post.slug]);
 
     const createdAt = new Date(post.date);
-    const createdAtText = formatDistanceToNow(createdAt, {addSuffix: true});
-    return <PostEntryDiv onClick={onClick}>
-        <PostEntryTitle>{post.title}</PostEntryTitle>
-        <PostEntryDescription>{post.description}</PostEntryDescription>
-        <PostEntryTags>
-            {post.tags.map(t => <Tag minimal>{t}</Tag>)}
-        </PostEntryTags>
-        <PostEntryDate>published {createdAtText}</PostEntryDate>
-
-    </PostEntryDiv>
-    
-})
+    const createdAtText = formatDistanceToNow(createdAt, { addSuffix: true });
+    return (
+        <PostEntryDiv onClick={onClick}>
+            <PostEntryTitle>{post.title}</PostEntryTitle>
+            <PostEntryDescription>{post.description}</PostEntryDescription>
+            <PostEntryTags>
+                {post.tags.map(t => (
+                    <Tag minimal>{t}</Tag>
+                ))}
+            </PostEntryTags>
+            <PostEntryDate>published {createdAtText}</PostEntryDate>
+        </PostEntryDiv>
+    );
+});

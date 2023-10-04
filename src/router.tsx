@@ -1,4 +1,4 @@
-import { RouteObject, createHashRouter as createMyRouter } from "react-router-dom";
+import { Navigate, RouteObject, createHashRouter as createMyRouter } from "react-router-dom";
 import { RootLayout } from "./layouts/RootLayout";
 import { HomePage } from "./pages/HomePage";
 import { BLOG_POSTS, linkFromSlug } from "./blog";
@@ -33,6 +33,7 @@ export function createRouter() {
                     }),
                 ),
             ],
+            errorElement: <Navigate to="/" />,
         },
     ]);
 }

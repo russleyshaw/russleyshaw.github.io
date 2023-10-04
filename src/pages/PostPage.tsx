@@ -2,6 +2,8 @@ import { observer } from "mobx-react";
 import { BlogMeta } from "../blog";
 import { formatDistanceToNow } from "date-fns";
 import styled from "styled-components";
+import { useTitle } from "../lib/react";
+import { APP_DISPLAY_NAME } from "../config";
 
 interface PostPageProps {
     meta: BlogMeta;
@@ -40,6 +42,8 @@ const ContentDiv = styled.div`
 
 export const PostPage = observer((props: PostPageProps) => {
     const { meta, children } = props;
+
+    useTitle(`${meta.title} | ${APP_DISPLAY_NAME}`);
 
     const createdAt = formatDistanceToNow(new Date(meta.date), {
         addSuffix: true,

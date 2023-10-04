@@ -1,6 +1,6 @@
 {
-    "name": "webapp-template",
-    "displayName": "Web App Template",
+    "name": "blog",
+    "displayName": "Russley's Blog",
     "version": "1.0.0",
     "description": "The current template I use for toying around with web applications.",
     "main": "index.js",

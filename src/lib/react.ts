@@ -63,3 +63,9 @@ export function useLocalStorageBool(key: string) {
 
     return [value, setBoolValue] as const;
 }
+
+export function useTitle(title: string) {
+    useEffect(() => {
+        document.title = title;
+    }, [title]);
+}
