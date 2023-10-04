@@ -1,9 +1,9 @@
 import { Navbar as BpNavbar, Alignment, Button } from "@blueprintjs/core";
 import { observer } from "mobx-react";
 import { useIsSettingsDrawerOpen } from "./SettingsDrawer";
-import { NavButton } from "../components/NavButton";
+
 import { APP_DISPLAY_NAME } from "../config";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 export const Navbar = observer(() => {
     const [, setSettingsOpen] = useIsSettingsDrawerOpen();
