@@ -35,8 +35,10 @@ const ContentDiv = styled.div`
     flex-direction: column;
     gap: 0.5em;
 
+    margin-bottom: 5em;
+
     p {
-        line-height: 1.75em;
+        line-height: 1.25em;
     }
 `;
 

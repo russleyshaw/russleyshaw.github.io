@@ -19,8 +19,18 @@ export const BLOG_POSTS: BlogPost[] = [
         tags: ["TypeScript", "Arrays"],
 
         slug: "hidden-index-undefineds",
-        description: "Accessing first/last/rest elements and destructuring in Typescript can introduce hidden undefineds.",
+        description:
+            "Accessing first/last/rest elements and destructuring in Typescript can introduce hidden undefineds.",
         lazy: lazy(() => import("./head-tail.js")),
+    },
+    {
+        title: "'Any' Small Scope",
+        date: "2023-10-5",
+        tags: ["TypeScript", "Generics"],
+        slug: "any-small-scope",
+        description:
+            "Typescript has a powerful type system and a lot can simply be inferred, but some times a bit more massaging needs to happen.",
+        lazy: lazy(() => import("./any-small-scope.js")),
     },
 ];
 
