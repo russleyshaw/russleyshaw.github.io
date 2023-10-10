@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { formatDistanceToNow } from "date-fns";
 import { Tag } from "@blueprintjs/core";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useTitle } from "../lib/react";
 import { APP_DISPLAY_NAME } from "../config";
+import { sortBy } from "lodash";
 
 const RootDiv = styled.div`
     width: 600px;
@@ -25,10 +26,12 @@ const PostsDiv = styled.div`
 export const HomePage = observer(() => {
     useTitle(`Home | ${APP_DISPLAY_NAME}`);
 
+    const sortedPosts = useMemo(() => sortBy(BLOG_POSTS, p => p.date), [BLOG_POSTS]);
+
     return (
         <RootDiv>
             <PostsDiv>
-                {BLOG_POSTS.map(post => (
+                {sortedPosts.map(post => (
                     <PostEntry post={post} />
                 ))}
             </PostsDiv>
