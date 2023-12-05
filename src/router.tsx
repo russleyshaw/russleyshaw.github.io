@@ -1,4 +1,5 @@
-import { Navigate, RouteObject, createHashRouter as createMyRouter } from "react-router-dom";
+import { Navigate, RouteObject } from "react-router-dom";
+
 import { RootLayout } from "./layouts/RootLayout";
 import { HomePage } from "./pages/HomePage";
 import { BLOG_POSTS, linkFromSlug } from "./blog";
@@ -11,29 +12,27 @@ export enum QueryParamKey {
     SETTINGS_DRAWER = "stgDr",
 }
 
-export function createRouter() {
-    return createMyRouter([
-        {
-            element: <RootLayout />,
-            children: [
-                {
-                    path: "/",
-                    element: <HomePage />,
-                },
-                ...BLOG_POSTS.map(
-                    (post): RouteObject => ({
-                        path: linkFromSlug(post.slug),
-                        element: (
-                            <PostPage meta={post}>
-                                <React.Suspense fallback="Loading...">
-                                    <post.lazy />
-                                </React.Suspense>
-                            </PostPage>
-                        ),
-                    }),
-                ),
-            ],
-            errorElement: <Navigate to="/" />,
-        },
-    ]);
-}
+export const routes: RouteObject[] = [
+    {
+        element: <RootLayout />,
+        children: [
+            {
+                path: "/",
+                element: <HomePage />,
+            },
+            ...BLOG_POSTS.map(
+                (post): RouteObject => ({
+                    path: linkFromSlug(post.slug),
+                    element: (
+                        <PostPage meta={post}>
+                            <React.Suspense fallback="Loading...">
+                                <post.lazy />
+                            </React.Suspense>
+                        </PostPage>
+                    ),
+                }),
+            ),
+        ],
+        errorElement: <Navigate to="/" />,
+    },
+];
