@@ -1,6 +1,6 @@
 import { mkdir } from "fs/promises";
 import path from "path";
-import { pathToSlug } from "../blog";
+import { getBlogRoute } from "../blog";
 import manifest from "../blog/manifest";
 
 async function main() {
@@ -8,7 +8,7 @@ async function main() {
     const indexHtml = await Bun.file(baseIndexFile).text();
 
     const staticRoutes = ["/"];
-    const blogRoutes = manifest.blogs.map(blog => pathToSlug(blog.slug));
+    const blogRoutes = manifest.blogs.map(blog => getBlogRoute(blog.slug));
 
     const realRoutes = [...staticRoutes, ...blogRoutes];
 

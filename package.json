@@ -8,8 +8,8 @@
     "scripts": {
         "dev": "bunx --bun vite",
         "build": "bunx --bun vite build",
-        "build:prod": "bun run build",
-        "scripts:populate": "bun src/scripts/populate_htmls.ts"
+        "build:prod": "bun run build && bun run generate:htmls",
+        "generate:htmls": "bun src/scripts/populate_htmls.ts"
     },
     "author": "",
     "license": "ISC",
