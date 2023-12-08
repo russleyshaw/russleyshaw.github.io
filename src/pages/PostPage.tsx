@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { APP_DISPLAY_NAME } from "../config";
 
 import { Card, Code } from "@blueprintjs/core";
-import { MDXEmbedProvider } from "mdx-embed";
 import { HTMLProps, Suspense } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import { getBlogEntry } from "../blog";
@@ -82,11 +81,9 @@ export const PostPage = observer(() => {
                 </span>
             </div>
             <ContentDiv className={styles.content}>
-                <MDXEmbedProvider>
-                    <Suspense fallback="Loading...">
-                        <meta.component components={{ code, Card: Card }} />
-                    </Suspense>
-                </MDXEmbedProvider>
+                <Suspense fallback="Loading...">
+                    <meta.component components={{ code, Card: Card }} />
+                </Suspense>
             </ContentDiv>
         </RootDiv>
     );
