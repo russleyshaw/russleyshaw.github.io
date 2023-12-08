@@ -1,31 +1,16 @@
 import { mkdir } from "fs/promises";
 import path from "path";
-import { isNotNil } from "../lib/common";
-import { routes } from "../router";
-
-const baseIndexFile = "dist/index.html";
+import { pathToSlug } from "../blog";
+import manifest from "../blog/manifest";
 
 async function main() {
-    let open = routes.map(route => ({ route, path: [route.path] }));
+    const baseIndexFile = "dist/index.html";
+    const indexHtml = await Bun.file(baseIndexFile).text();
 
-    let realRoutes: string[] = [];
+    const staticRoutes = ["/"];
+    const blogRoutes = manifest.blogs.map(blog => pathToSlug(blog.slug));
 
-    while (open.length > 0) {
-        const route = open.shift()!;
-        const path = route.path.filter(isNotNil);
-
-        if ((path.length > 0 && route.route.element) || route.route.Component) {
-            console.log(`Rendering ${path}`);
-            realRoutes.push(path.join("/"));
-        }
-
-        for (const childRoute of route.route?.children ?? []) {
-            open.push({ route: childRoute, path: [...path, childRoute.path].filter(isNotNil) });
-        }
-    }
-
-    const indexFile = Bun.file(baseIndexFile);
-    const indexHtml = await indexFile.text();
+    const realRoutes = [...staticRoutes, ...blogRoutes];
 
     for (const route of realRoutes) {
         const filePath = path.join("dist", route, "index.html");
@@ -39,8 +24,9 @@ async function main() {
 
 main()
     .then(() => {
-        console.log("Done");
+        process.exit(0);
     })
     .catch(err => {
         console.error(err);
+        process.exit(1);
     });

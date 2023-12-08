@@ -1,77 +1,40 @@
 import { observer } from "mobx-react";
 
+import "../lib/higihlight";
+
 import hljs from "highlight.js";
-import "../highlight.scss";
 
 import { useCallback, useMemo, useState } from "react";
-import { css, styled } from "styled-components";
+import { styled } from "styled-components";
 import { trimLines } from "../lib/string";
 import { Button } from "@blueprintjs/core";
 import { OpenInPlayground } from "./OpenInPlayground";
 
+import { AnimatePresence, motion } from "framer-motion";
+
+import styles from "./CodeBlock.module.css";
+
 export interface CodeBlockProps {
     filename?: string;
     language?: string;
-    code: string;
-    
-    minimal?: boolean;
+    code?: string;
 }
 
-const MinimalRootDivCss = css`
-    padding: 0;
-    border: none;
-    box-shadow: none;
-    border-radius: 0;
-`;
-
-const RootDiv = styled.div<{ minimal?: boolean }>`
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-
-    position: relative;
-
-    padding: 0.5rem;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 0.5rem;
-    font-family: "Fira Code", monospace;
-
-    ${p => p.minimal && MinimalRootDivCss}
-`;
-
-const ActionsDiv = styled.div`
-    position: absolute;
-    top: 0;
-    right: 0;
-
-    margin-right: -0.5rem;
-
-    transform: translateX(100%);
-
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-`;
-
-const CodeDiv = styled.div<{ minimal?: boolean }>`
+const CodeDiv = styled.div`
     overflow: auto;
     flex: 1;
-
-    pre {
-        font-size: ${p => (p.minimal ? "0.6rem" : "0.75rem")};
-    }
 `;
 
 export const CodeBlock = observer((props: CodeBlockProps) => {
     const [copied, setCopied] = useState(false);
+    const [hovered, setHovered] = useState(false);
 
-    const { code, language = "typescript", minimal } = props;
+    const { code = "" } = props;
 
-    const trimmedCode = useMemo(() => trimLines(code), [code]);
+    const trimmedCode = useMemo(() => trimLines(code ?? ""), [code]);
     const highlighted = useMemo(() => {
-        return hljs.highlight(language, trimmedCode).value;
-    }, [trimmedCode, language]);
+        return hljs.highlightAuto(trimmedCode);
+    }, [trimmedCode]);
 
     const onCopyClick = useCallback(() => {
         navigator.clipboard.writeText(trimmedCode);
@@ -82,27 +45,52 @@ export const CodeBlock = observer((props: CodeBlockProps) => {
         }, 5000);
     }, [trimmedCode]);
 
-    const showOpenInPlayground = language === "ts" || language === "typescript";
+    const showOpenInPlayground =
+        highlighted.language === "ts" || highlighted.language === "typescript";
 
     return (
-        <RootDiv minimal={minimal}>
-            {!minimal && (
-                <ActionsDiv>
-                    <Button
-                        minimal
-                        small
-                        onClick={onCopyClick}
-                        icon="clipboard"
-                        text={copied ? "Copied!" : "Copy"}
-                    />
-                    {showOpenInPlayground && <OpenInPlayground minimal code={trimmedCode} />}
-                </ActionsDiv>
-            )}
-            <CodeDiv minimal={minimal}>
+        <div
+            className={styles.root}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+        >
+            <AnimatePresence>
+                {hovered && (
+                    <motion.div
+                        className={styles.actions}
+                        initial={{
+                            right: -50,
+                            opacity: 0,
+                        }}
+                        animate={{
+                            right: 0,
+                            opacity: 1,
+                        }}
+                        transition={{
+                            duration: 0.5,
+                        }}
+                        exit={{
+                            right: -50,
+                            opacity: 0,
+                        }}
+                    >
+                        <Button
+                            minimal
+                            small
+                            onClick={onCopyClick}
+                            icon="clipboard"
+                            text={copied ? "Copied!" : "Copy"}
+                        />
+                        {showOpenInPlayground && <OpenInPlayground minimal code={trimmedCode} />}
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            <CodeDiv>
                 <pre>
-                    <code dangerouslySetInnerHTML={{ __html: highlighted }} />
+                    <code dangerouslySetInnerHTML={{ __html: highlighted.value }} />
                 </pre>
             </CodeDiv>
-        </RootDiv>
+        </div>
     );
 });

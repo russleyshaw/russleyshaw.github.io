@@ -1,0 +1,7 @@
+html {
+    --color-primary: hsl(230, 75%, 57%);
+}
+
+html.dark {
+    --color-primary: hsl(186, 75%, 57%);
+}

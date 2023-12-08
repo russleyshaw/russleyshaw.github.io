@@ -1,0 +1,57 @@
+.heading {
+    display: grid;
+
+    grid:
+        "title title" auto
+        "description date" auto
+        "description author" auto /
+        1fr auto;
+
+    .title {
+        grid-area: title;
+    }
+
+    .description {
+        grid-area: description;
+    }
+
+    .date {
+        grid-area: date;
+    }
+}
+
+.description {
+    font-size: 0.8rem;
+    opacity: 0.5;
+}
+
+.content {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        margin: 1rem 0 0.5rem 0;
+        color: var(--color-primary);
+    }
+
+    ul {
+        padding: 0 0 0 1.5rem;
+        margin: 0;
+    }
+
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+
+    p {
+        line-height: 1.5em;
+        text-indent: 2rem;
+    }
+
+    strong {
+        font-weight: 600;
+        color: var(--color-primary);
+    }
+}

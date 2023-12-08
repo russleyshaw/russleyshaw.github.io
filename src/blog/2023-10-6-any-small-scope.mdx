@@ -1,0 +1,70 @@
+---
+title: Minimizing Ambiguous Types in TypeScript
+description: Optimizing TypeScript code by limiting the usage of any and undefined types to the smallest possible scope.
+tags:
+    - typescript
+author: Russley Shaw
+created: 2023-01-01
+slug: any-small-scope
+---
+
+import { Card } from "@blueprintjs/core";
+import { Emphasis } from "../components/Emphasis";
+
+Many coming from dynamic languages are worried about their development being slowed by needing to explicitly declare types everywhere.
+However, **TypeScript is smart enough to infer types in many cases.** We want it to work for us as hard as possible so we can do less with more.
+
+```ts
+function getTime() {
+    return Date.now();
+}
+
+const bornAt: string = getNumber();
+// Type 'number' is not assignable to type 'string'.
+```
+
+Here, we can see the inferencing of `getTime`'s return type is `number`, which keeps us from assigning it to a `string` variable.
+TypeScript a powerful inferencing ability; **however, it occasionally doesn't infer what we'd like**.
+
+## Where TypeScript Inference Fails
+
+A common operation performed is filtering out `null` and `undefined` values from an array. Typically, this might be done like so:
+
+```ts
+const arr = [0, 1, 2, null, "foo", undefined, 3, 4, 5];
+
+const result = arr.filter(v => v != null);
+```
+
+However, the type of `result` is `(string | number | null | undefined)[]`. Given all the context provided,
+it is impossible for null or undefined to exist in this array. What we really want
+is the result to be `(string | number)[]`. Typescript is not smart enough to infer that the
+only possible results from the filter are non-nullable.
+
+## Helping TypeScript Infer Types
+
+A way we can help it infer the types through the `filter` is by defining a `type assertion` function.
+
+```ts
+// Assert value is T if not null nor undefined
+function isNotNil<T>(value: T | null | undefined): value is T {
+    return value != null;
+}
+```
+
+In the example above, we can recontextualize the `v != null` operation
+into a function called `isNotNil` that forces/asserts the types
+appropriately.
+
+```ts
+const out1 = arr.filter(v => v != null);
+// out1: (string | number | null | undefined)[]
+// [0, 1, 2, "foo", 3, 4, 5]
+
+const out2 = arr.filter(isNotNil);
+// out2: (string | number)[]
+// [0, 1, 2, "foo", 3, 4, 5]
+```
+
+Now, we have a function that more explicitly declares the intended type lost by
+TypeScript, but also it has a more meaningful name.

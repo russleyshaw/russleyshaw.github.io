@@ -1,0 +1,36 @@
+---
+title: Heads and Tails
+description: Get the first element and the rest of an array
+author: Russley Shaw
+tags: 
+    - typescript
+    - arrays
+slug: heads-and-tails
+created: 2023-9-30
+---
+
+TypeScript treats array indexes as always defined. Same with destructuring. One
+issue encountered in Partcaster was we were expecting a first element and captured
+the rest in a seperate value
+            
+```ts
+const [first, ...rest] = values;
+```
+However, in this case values was `[]` so first was undefined and rest was `[]`. To prevent this, write a simple `getHeadTail()` function that treats the first element as undefined.
+```ts
+function getHeadTail<T>(items: T[]): [T | undefined, T[]] {
+    const [first, ...rest] = items;
+    return [first, rest];
+}
+
+const [first, rest] = getHeadTail([1, 2, 3]);
+console.log(first, rest); // 1, [2, 3]
+```
+            
+Or consider using `arr.at(number)` which treats its return result as `T | undefined`. It accepts
+negative values so you can do `arr.at(-1)` to get the last element or `arr.at(0)` to get the
+first element.
+        
+
+            
+

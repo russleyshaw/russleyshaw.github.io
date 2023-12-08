@@ -1,0 +1,191 @@
+---
+title: MDX is Markdown++
+description: MDX is Markdown with JSX
+author: Russley Shaw
+tags:
+    - typescript
+    - mdx
+created: 2023-12-4
+slug: mdx-is-mdpp
+---
+
+import { Callout, Card } from "@blueprintjs/core";
+
+## Finding A New Place For Thoughts.
+
+Writing down thoughts is only half the battle; the other is finding a place to put them.
+Throughout the week, I've been taking note of any interesting ideas or problems I come across and write a short blurb about them.
+Up until now, These notes have only existed in Obsidian, a Markdown, local-first notes application.
+
+Wanting to find a new place to put these blurbs, I figured I might as well just write up a whole site dedicated to them.
+The hardest question I had to answer was: **How will I write them?**
+
+## Markdown: The Obvious Choice
+
+Markdown is everywhere, simple, supported in many text editors and can easily be rendered on the web.
+It's **the** standard choice for writing content in a plain-text format.
+
+```md
+# This is some content
+
+> This is a quote
+
+-   This is a list
+-   This is a list
+-   This is a list
+
+## This is a subheading
+
+This is some more content
+```
+
+It does have some limitations though. In its simplicity, it lacks custom components and is limited to the Markdown spec.
+Lists, headings, links, images and some basic text formatting are all you get.
+That covers most use-cases, but if you wanted to render an interactive graph, or provide a field to enter a value, you're out of luck.
+
+### JSX: HTML in JavaScript
+
+On the other end of the spectrum of simplicity vs flexibility is JSX. JSX is simply the format used by React to mimic HTML in JavaScript.
+Importantly with JSX, you can easily write your own reusable components and React itself has a large ecosystem of support.
+
+```tsx
+function MyPage() {
+    return (
+        <div>
+            <h1>This is a heading</h1>
+            <p>This is some content</p>
+            <ul>
+                <li>This is a list</li>
+                <li>This is a list</li>
+                <li>This is a list</li>
+            </ul>
+            <SomeCustomComponent args={1234} />
+        </div>
+    );
+}
+```
+
+Writing in this format isn't as great as Markdown.
+It's more verbose and requires a bit more knowledge of HTML and JavaScript.
+Editors don't syntax highlight the code in the `<code>` elements.
+Additionally trying to write a `<code>` block ends up having to be indented differently because despite being nested, it's not nested in the same way as the JSX.
+
+### Writing Code in Markdown vs JSX
+
+With JSX:
+
+```tsx
+function Component() {
+    return (
+        <div>
+            <code>{`
+const a = 4;
+for (let i = 0; i < a; i++) {
+    console.log(i);
+}
+`}</code>
+        </div>
+    );
+}
+```
+
+With Markdown:
+
+```
+'''tsx
+const a = 4;
+for (let i = 0; i < a; i++) {
+    console.log(i);
+}
+'''
+```
+
+## MDX: Markdown + JSX
+
+Recently I came across MDX and was surprised to find it was exactly what I was looking for: **a hybrid of Markdown and JSX**.
+It benefits from the simple writing style of Markdown, but allows custom components, including `@blueprintjs/core` components.
+
+### Example
+
+```md
+## Example: Callout
+
+As you can see this is otherwise normal Markdown.
+
+<Callout intent="success" icon="airplane">
+    <h5>MDX is Markdown with JSX</h5>
+    <p>MDX is Markdown with JSX</p>
+</Callout>
+
+Within your Markdown, import a JSX component and use it.
+```
+
+### Result
+
+<Card>
+As you can see this is otherwise normal Markdown.
+
+<Callout intent="success" icon="airplane">
+    <h5>MDX is Markdown with JSX</h5>
+    <p>MDX is Markdown with JSX</p>
+</Callout>
+
+Within your Markdown, import a JSX component and use it.
+
+</Card>
+
+## How to use MDX
+
+Currently, I am using `@mdx-js/rollup` with `remark-frontmatter` to parse the metadata at the top of the MDX file.
+
+## Pitfalls
+
+I was wanting to create a custom component called `<PresentCode>...</PresentCode>` that would render any content I want with an option to expand out a code block.
+This would have been helpful to show off some component's usage while also easily showing the exact code that generated it.
+At this current time, I am not able to parse the MDX between the component tags before they are rendered.
+
+In the case of a simple example
+
+```tsx
+<PresentCode>
+    <Callout intent="success" icon="airplane">
+        <h5>MDX is Markdown with JSX</h5>
+        <p>MDX is Markdown with JSX</p>
+    </Callout>
+</PresentCode>
+```
+
+I was hoping to be able to make the component render both the `<Callout>` and the code that generated it:
+
+<Card>
+
+<Callout intent="success" icon="airplane">
+    <h5>MDX is Markdown with JSX</h5>
+    <p>MDX is Markdown with JSX</p>
+</Callout>
+```
+<Callout intent="success" icon="airplane">
+    <h5>MDX is Markdown with JSX</h5>
+    <p>MDX is Markdown with JSX</p>
+</Callout>
+```
+</Card>
+
+Remark and Rehype are popular and powerful tools for parsing Markdown and HTML respectively, but I have not been able to fully investigate a solution.
+Given the depth, I expect it is possible.
+
+## Writing This In MDX & Future Plans
+
+This post was written in MDX and is available on GitHub.
+I hope to continue writing with MDX and I've found it to be a useful hybrid of the two formats.
+Things I'd like to be able to support in the future:
+
+-   Table of Contents
+-   Graphing & Charting
+-   and more!
+
+## More Reading
+
+-   [MDX](https://mdxjs.com/)
+-   [MDX VSCode Extension](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx)
+-   [Writing Markup with JSX](https://react.dev/learn/writing-markup-with-jsx)

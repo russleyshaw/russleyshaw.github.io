@@ -1,20 +1,23 @@
+import { Tag } from "@blueprintjs/core";
+import { formatDistanceToNow } from "date-fns";
 import { observer } from "mobx-react";
-import { BLOG_POSTS, BlogPost, linkFromSlug } from "../blog";
+import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { formatDistanceToNow } from "date-fns";
-import { Tag } from "@blueprintjs/core";
-import { useCallback, useMemo } from "react";
-import { useTitle } from "../lib/react";
+import { getBlogRoute, parseCreatedDate } from "../blog";
 import { APP_DISPLAY_NAME } from "../config";
+import { useTitle } from "../lib/hooks";
 import { sortBy } from "lodash";
+import manifest from "../blog/manifest";
+import NewBadge from "../components/NewBadge";
+import { AnimatePresence, motion } from "framer-motion";
 
 const RootDiv = styled.div`
     width: 600px;
     align-self: center;
 `;
 
-const PostsDiv = styled.div`
+const PostsDiv = styled(motion.div)`
     display: flex;
     flex-direction: column;
 
@@ -26,20 +29,38 @@ const PostsDiv = styled.div`
 export const HomePage = observer(() => {
     useTitle(`Home | ${APP_DISPLAY_NAME}`);
 
-    const sortedPosts = useMemo(() => sortBy(BLOG_POSTS, p => p.date), [BLOG_POSTS]);
+    const blogs = sortBy(manifest.blogs, b => parseCreatedDate(b.created)).reverse();
 
     return (
         <RootDiv>
             <PostsDiv>
-                {sortedPosts.map(post => (
-                    <PostEntry post={post} />
+                {blogs.map(meta => (
+                    <PostEntry
+                        created={meta.created}
+                        description={meta.description}
+                        slug={meta.slug}
+                        tags={meta.tags}
+                        title={meta.title}
+                        key={meta.slug}
+                    />
                 ))}
             </PostsDiv>
         </RootDiv>
     );
 });
 
-const PostEntryDiv = styled.div`
+const NEW_POST_THRESHOLD_MS = 1000 * 60 * 60 * 24 * 7;
+
+const NewBadgeDiv = styled.div`
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    transform: translate(50%, -50%) rotate(30deg);
+`;
+
+const PostEntryDiv = styled(motion.div)`
+    position: relative;
     display: grid;
 
     grid-template:
@@ -71,6 +92,8 @@ const PostEntryTags = styled.div`
 
     display: flex;
     flex-direction: row;
+    justify-content: flex-end;
+    flex-wrap: wrap;
     gap: 0.2em;
 `;
 
@@ -79,27 +102,58 @@ const PostEntryDate = styled.span`
     justify-self: end;
 `;
 
-const PostEntry = observer((props: { post: BlogPost }) => {
-    const { post } = props;
+interface PostEntryProps {
+    slug: string;
+    title: string;
+    description: string;
+    created: string;
+    tags: string[];
+}
+
+const PostEntry = observer((props: PostEntryProps) => {
+    const { slug, title, tags, description, created } = props;
+
+    const [hovered, setHovered] = useState(false);
 
     const navigate = useNavigate();
     const onClick = useCallback(() => {
-        const link = linkFromSlug(post.slug);
-        navigate(link);
-    }, [post.slug]);
+        navigate(getBlogRoute(slug));
+    }, [slug]);
 
-    const createdAt = new Date(post.date);
+    const isNew = Date.now() - parseCreatedDate(created).getTime() < NEW_POST_THRESHOLD_MS;
+
+    const createdAt = new Date(created);
     const createdAtText = formatDistanceToNow(createdAt, { addSuffix: true });
     return (
-        <PostEntryDiv onClick={onClick}>
-            <PostEntryTitle>{post.title}</PostEntryTitle>
-            <PostEntryDescription>{post.description}</PostEntryDescription>
+        <PostEntryDiv
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+            onClick={onClick}
+            initial={{
+                opacity: 0,
+                x: 20,
+            }}
+            animate={{
+                opacity: 1,
+                x: 0,
+            }}
+            exit={{
+                opacity: 0,
+                x: 20,
+            }}
+        >
+            <NewBadgeDiv>
+                <AnimatePresence>{isNew && <NewBadge wiggle={hovered} />}</AnimatePresence>
+            </NewBadgeDiv>
+
+            <PostEntryTitle>{title}</PostEntryTitle>
+            <PostEntryDescription>{description}</PostEntryDescription>
             <PostEntryTags>
-                {post.tags.map(t => (
+                {tags.map(t => (
                     <Tag minimal>{t}</Tag>
                 ))}
             </PostEntryTags>
-            <PostEntryDate>published {createdAtText}</PostEntryDate>
+            <PostEntryDate>{createdAtText}</PostEntryDate>
         </PostEntryDiv>
     );
 });

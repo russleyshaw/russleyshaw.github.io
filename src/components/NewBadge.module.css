@@ -1,0 +1,7 @@
+.newBadge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    background-color: #f44336;
+    color: #fff;
+}

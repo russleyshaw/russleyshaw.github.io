@@ -1,0 +1,8 @@
+.siteTitle {
+    color: var(--color-primary);
+
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: -1;
+}

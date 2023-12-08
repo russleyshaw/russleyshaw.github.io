@@ -2,10 +2,7 @@ import { observer } from "mobx-react";
 import { Outlet } from "react-router-dom";
 import styled, { DefaultTheme, ThemeProvider, createGlobalStyle, css } from "styled-components";
 import { Navbar } from "../partials/Navbar";
-import { SettingsDrawer } from "../partials/SettingsDrawer";
-import { AppSettings, AppSettingsContext } from "../models/app_settings";
-import { useState } from "react";
-import { useDarkMode } from "../lib/theme";
+import { THEME_STORE } from "../models/theme";
 
 const DARK_MODE_CSS = css`
     background-color: #2f343c;
@@ -18,8 +15,6 @@ const GlobalStyle = createGlobalStyle`
 
         margin: 0;
         padding: 0;
-
-        ${p => p.theme.isDarkMode && DARK_MODE_CSS}
     }
 
 
@@ -28,7 +23,7 @@ const GlobalStyle = createGlobalStyle`
         padding: 0;
     }
 
-    code, pre {
+    code, pre, p {
         padding: 0;
         margin: 0;
     }
@@ -43,24 +38,17 @@ const RootDiv = styled.div`
 `;
 
 export const RootLayout = observer(() => {
-    const [appSettings] = useState(() => new AppSettings());
-
     const styledTheme: DefaultTheme = {
-        isDarkMode: appSettings.isDarkMode,
+        isDarkMode: THEME_STORE.isDarkMode,
     };
 
-    useDarkMode(appSettings.isDarkMode);
-
     return (
-        <AppSettingsContext.Provider value={appSettings}>
-            <ThemeProvider theme={styledTheme}>
-                <GlobalStyle />
-                <RootDiv>
-                    <Navbar />
-                    <Outlet />
-                    <SettingsDrawer />
-                </RootDiv>
-            </ThemeProvider>
-        </AppSettingsContext.Provider>
+        <ThemeProvider theme={styledTheme}>
+            <GlobalStyle />
+            <RootDiv>
+                <Navbar />
+                <Outlet />
+            </RootDiv>
+        </ThemeProvider>
     );
 });
