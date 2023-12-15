@@ -1,0 +1,46 @@
+:root {
+    --button-border-radius: var(--spacing-2);
+}
+
+.button {
+    padding: var(--spacing-2) var(--spacing-4);
+    background-color: unset;
+    border: var(--color-primary) 1px solid;
+    border-radius: var(--button-border-radius);
+    color: var(--color-primary);
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+        background-color: var(--color-primary);
+        background-color: var(--color-primary-dark);
+        color: var(--color-background);
+    }
+
+    &[data-active="true"] {
+        background-color: var(--color-primary);
+        background-color: var(--color-primary-dark);
+        color: var(--color-background);
+    }
+}
+
+.button-group {
+    display: flex;
+    flex-direction: row;
+
+    & > :last-child {
+        border-radius: 0 var(--button-border-radius) var(--button-border-radius) 0;
+    }
+
+    & > :first-child {
+        border-radius: var(--button-border-radius) 0 0 var(--button-border-radius);
+    }
+
+    & > :not(:last-child):not(:first-child) {
+        border-radius: 0;
+    }
+
+    & > :not(:last-child) {
+        border-right: none;
+    }
+}

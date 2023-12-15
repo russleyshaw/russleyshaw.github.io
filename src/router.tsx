@@ -15,6 +15,7 @@ export const routes: RouteObject[] = [
             {
                 path: "/blog/:slug",
                 element: <PostPage />,
+                loader: () => import("./pages/PostPage"),
             },
         ],
     },

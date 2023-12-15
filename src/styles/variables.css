@@ -1,7 +1,40 @@
-html {
-    --color-primary: hsl(230, 75%, 57%);
+:root {
+    --desktop: 900px;
+    --mobile: 500px;
+
+    --spacing-0: 0;
+    --spacing-1: 0.25rem;
+    --spacing-2: 0.5rem;
+    --spacing-3: 0.75rem;
+    --spacing-4: 1rem;
+    --spacing-5: 1.25rem;
+    --spacing-6: 1.5rem;
+    --spacing-7: 1.75rem;
+    --spacing-8: 2rem;
 }
 
-html.dark {
+:root {
+    --color-primary: hsl(230, 75%, 57%);
+    --color-primary-light: hsl(230, 75%, 67%);
+    --color-primary-dark: hsl(230, 75%, 47%);
+    --color-primary-text: hsl(230, 75%, 17%);
+
+    --color-text: hsl(0, 0%, 17%);
+
+    --color-background: #f5f5f5;
+    --color-background-dark: #e0e0e0;
+
+    --font-family: "Roboto", sans-serif;
+}
+
+[data-theme="dark"] {
     --color-primary: hsl(186, 75%, 57%);
+    --color-primary-light: hsl(186, 75%, 67%);
+    --color-primary-dark: hsl(186, 75%, 47%);
+    --color-primary-text: hsl(186, 75%, 17%);
+
+    --color-text: hsl(0, 0%, 100%);
+
+    --color-background: #333333;
+    --color-background-dark: #222222;
 }

@@ -1,14 +1,27 @@
 .root {
     display: flex;
     flex-direction: column;
-    align-items: start;
+    align-items: stretch;
 
     position: relative;
 
-    padding: 0.5rem;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 0.5rem;
+    padding: 1rem;
+
+    background-color: var(--color-background-dark);
+    border-radius: 1rem;
+
+    pre {
+        overflow-x: auto;
+        background-color: unset;
+        padding: 0;
+        margin: 0;
+
+        code {
+            padding: 0;
+            margin: 0;
+            background-color: unset;
+        }
+    }
 }
 
 .actions {
@@ -20,9 +33,10 @@
 
     transform: translateX(100%);
 
+    padding-left: 0.5rem;
+
     display: flex;
     flex-direction: column;
     align-items: start;
-
-    overflow: hidden;
+    gap: 0.5rem;
 }

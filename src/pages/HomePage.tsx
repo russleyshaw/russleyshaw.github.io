@@ -1,14 +1,13 @@
-import { Tag } from "@blueprintjs/core";
 import { formatDistanceToNow } from "date-fns";
 import { observer } from "mobx-react";
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { getBlogRoute, parseCreatedDate } from "../blog";
+import { getBlogRoute, parseCreatedDate } from "./blog";
 import { APP_DISPLAY_NAME } from "../config";
 import { useTitle } from "../lib/hooks";
 import { sortBy } from "lodash";
-import manifest from "../blog/manifest";
+import manifest from "./blog/manifest";
 import NewBadge from "../components/NewBadge";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -29,12 +28,12 @@ const PostsDiv = styled(motion.div)`
 export const HomePage = observer(() => {
     useTitle(`Home | ${APP_DISPLAY_NAME}`);
 
-    const blogs = sortBy(manifest.blogs, b => parseCreatedDate(b.created)).reverse();
+    const blogs = sortBy(manifest.blogs, (b) => parseCreatedDate(b.created)).reverse();
 
     return (
         <RootDiv>
             <PostsDiv>
-                {blogs.map(meta => (
+                {blogs.map((meta) => (
                     <PostEntry
                         created={meta.created}
                         description={meta.description}
@@ -116,6 +115,7 @@ const PostEntry = observer((props: PostEntryProps) => {
     const [hovered, setHovered] = useState(false);
 
     const navigate = useNavigate();
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     const onClick = useCallback(() => {
         navigate(getBlogRoute(slug));
     }, [slug]);
@@ -149,8 +149,8 @@ const PostEntry = observer((props: PostEntryProps) => {
             <PostEntryTitle>{title}</PostEntryTitle>
             <PostEntryDescription>{description}</PostEntryDescription>
             <PostEntryTags>
-                {tags.map(t => (
-                    <Tag minimal>{t}</Tag>
+                {tags.map((t) => (
+                    <div className="badge">{t}</div>
                 ))}
             </PostEntryTags>
             <PostEntryDate>{createdAtText}</PostEntryDate>

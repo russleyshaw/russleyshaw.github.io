@@ -1,4 +1,3 @@
-import { Navbar as BpNavbar, Alignment, Button } from "@blueprintjs/core";
 import { observer } from "mobx-react";
 
 import { APP_DISPLAY_NAME } from "../config";
@@ -9,19 +8,16 @@ import styles from "./Navbar.module.css";
 
 export const Navbar = observer(() => {
     return (
-        <BpNavbar>
-            <BpNavbar.Group align={Alignment.LEFT}>
-                <BpNavbar.Heading>
-                    <NavLink className={styles.siteTitle} to="/">
-                        {APP_DISPLAY_NAME}
-                    </NavLink>
-                </BpNavbar.Heading>
-                <BpNavbar.Divider />
-            </BpNavbar.Group>
+        <div className={styles.root}>
+            <div>
+                <NavLink className={styles.siteTitle} to="/">
+                    {APP_DISPLAY_NAME}
+                </NavLink>
+            </div>
 
-            <BpNavbar.Group align={Alignment.RIGHT}>
+            <div>
                 <ThemeSelect />
-            </BpNavbar.Group>
-        </BpNavbar>
+            </div>
+        </div>
     );
 });

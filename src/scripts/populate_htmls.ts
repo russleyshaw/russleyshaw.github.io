@@ -1,7 +1,7 @@
 import { mkdir } from "fs/promises";
 import path from "path";
-import { getBlogRoute } from "../blog";
-import manifest from "../blog/manifest";
+import { getBlogRoute } from "../pages/blog";
+import manifest from "../pages/blog/manifest";
 
 async function main() {
     const baseIndexFile = "dist/index.html";

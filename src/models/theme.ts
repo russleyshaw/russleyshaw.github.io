@@ -1,8 +1,6 @@
 import { autorun, makeAutoObservable } from "mobx";
 import { LocalStorageModel } from "./local_storage_model";
 
-import { Classes } from "@blueprintjs/core";
-
 export enum ThemeSetting {
     SYSTEM = "system",
     LIGHT = "light",
@@ -14,7 +12,7 @@ export enum ThemeMode {
     DARK = "dark",
 }
 
-const DARK_CLASSES = [Classes.DARK, "dark"];
+const DARK_CLASSES = ["dark"];
 
 export class ThemeModel {
     systemMode: ThemeMode;

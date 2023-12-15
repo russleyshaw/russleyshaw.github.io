@@ -1,13 +1,12 @@
 import { observer } from "mobx-react";
 
-import "../lib/higihlight";
+import "../lib/highlight";
 
 import hljs from "highlight.js";
 
 import { useCallback, useMemo, useState } from "react";
 import { styled } from "styled-components";
 import { trimLines } from "../lib/string";
-import { Button } from "@blueprintjs/core";
 import { OpenInPlayground } from "./OpenInPlayground";
 
 import { AnimatePresence, motion } from "framer-motion";
@@ -20,20 +19,15 @@ export interface CodeBlockProps {
     code?: string;
 }
 
-const CodeDiv = styled.div`
-    overflow: auto;
-    flex: 1;
-`;
-
 export const CodeBlock = observer((props: CodeBlockProps) => {
     const [copied, setCopied] = useState(false);
     const [hovered, setHovered] = useState(false);
 
-    const { code = "" } = props;
+    const { code = "", language } = props;
 
     const trimmedCode = useMemo(() => trimLines(code ?? ""), [code]);
     const highlighted = useMemo(() => {
-        return hljs.highlightAuto(trimmedCode);
+        return hljs.highlight(trimmedCode, { language: language ?? "typescript" });
     }, [trimmedCode]);
 
     const onCopyClick = useCallback(() => {
@@ -45,8 +39,9 @@ export const CodeBlock = observer((props: CodeBlockProps) => {
         }, 5000);
     }, [trimmedCode]);
 
-    const showOpenInPlayground =
-        highlighted.language === "ts" || highlighted.language === "typescript";
+    const lang = language ?? highlighted.language;
+
+    const showOpenInPlayground = lang === "ts" || lang === "typescript" || lang === "tsx";
 
     return (
         <div
@@ -59,7 +54,7 @@ export const CodeBlock = observer((props: CodeBlockProps) => {
                     <motion.div
                         className={styles.actions}
                         initial={{
-                            right: -50,
+                            right: -100,
                             opacity: 0,
                         }}
                         animate={{
@@ -70,27 +65,25 @@ export const CodeBlock = observer((props: CodeBlockProps) => {
                             duration: 0.5,
                         }}
                         exit={{
-                            right: -50,
+                            right: -100,
                             opacity: 0,
                         }}
                     >
-                        <Button
-                            minimal
-                            small
-                            onClick={onCopyClick}
-                            icon="clipboard"
-                            text={copied ? "Copied!" : "Copy"}
-                        />
-                        {showOpenInPlayground && <OpenInPlayground minimal code={trimmedCode} />}
+                        <button type="button" className="button" onClick={onCopyClick}>
+                            {copied ? "Copied!" : "Copy"}
+                        </button>
+                        {showOpenInPlayground && (
+                            <button type="button" className="button">
+                                TS Playground
+                            </button>
+                        )}
                     </motion.div>
                 )}
             </AnimatePresence>
 
-            <CodeDiv>
-                <pre>
-                    <code dangerouslySetInnerHTML={{ __html: highlighted.value }} />
-                </pre>
-            </CodeDiv>
+            <pre>
+                <code dangerouslySetInnerHTML={{ __html: highlighted.value }} />
+            </pre>
         </div>
     );
 });

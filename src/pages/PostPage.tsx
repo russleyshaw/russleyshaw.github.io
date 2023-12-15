@@ -1,45 +1,28 @@
 import { formatDistanceToNow } from "date-fns";
+import { motion, stagger } from "framer-motion";
 import { observer } from "mobx-react";
-import styled from "styled-components";
-import { APP_DISPLAY_NAME } from "../config";
-
-import { Card, Code } from "@blueprintjs/core";
-import { HTMLProps, Suspense } from "react";
+import React, { Suspense } from "react";
 import { Navigate, useParams } from "react-router-dom";
-import { getBlogEntry } from "../blog";
-import manifest from "../blog/manifest";
-import { CodeBlock } from "../components/CodeBlock";
+import { getBlogEntry } from "./blog";
+import manifest from "./blog/manifest";
+import { APP_DISPLAY_NAME } from "../config";
 import { useTitle } from "../lib/hooks";
-import { trimLines } from "../lib/string";
-import { motion } from "framer-motion";
 
 import styles from "./PostPage.module.css";
+import { CodeBlock } from "../components/CodeBlock";
 
-const RootDiv = styled(motion.div)`
-    width: 600px;
-    align-self: center;
+const components = {
+    pre: (props: any) => {
+        console.log("Pre", props);
+        if (props.children.type === "code") {
+            console.log("Code", props.children);
+            const language = props.children.props.className?.replace("language-", "");
+            return <CodeBlock code={props.children.props.children} language={language} />;
+        }
 
-    margin-top: 2em;
-
-    display: flex;
-    flex-direction: column;
-    gap: 2em;
-`;
-
-const ContentDiv = styled.div`
-    margin-bottom: 5em;
-`;
-
-function code(props: HTMLProps<HTMLDivElement>) {
-    const text = props.children as any as string;
-    const lines = trimLines(text).split("\n");
-
-    if (lines.length === 1) {
-        return <Code>{text}</Code>;
-    }
-
-    return <CodeBlock code={text} />;
-}
+        return <pre {...props} />;
+    },
+};
 
 export const PostPage = observer(() => {
     const params = useParams();
@@ -56,7 +39,8 @@ export const PostPage = observer(() => {
         addSuffix: true,
     });
     return (
-        <RootDiv
+        <motion.div
+            className={styles.root}
             initial={{
                 opacity: 0,
                 y: 20,
@@ -80,11 +64,12 @@ export const PostPage = observer(() => {
                     {createdAt}
                 </span>
             </div>
-            <ContentDiv className={styles.content}>
+
+            <div className={styles.content}>
                 <Suspense fallback="Loading...">
-                    <meta.component components={{ code, Card: Card }} />
+                    <meta.component components={components} />
                 </Suspense>
-            </ContentDiv>
-        </RootDiv>
+            </div>
+        </motion.div>
     );
 });

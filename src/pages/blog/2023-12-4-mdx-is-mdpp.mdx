@@ -9,8 +9,6 @@ created: 2023-12-4
 slug: mdx-is-mdpp
 ---
 
-import { Callout, Card } from "@blueprintjs/core";
-
 ## Finding A New Place For Thoughts.
 
 Writing down thoughts is only half the battle; the other is finding a place to put them.
@@ -103,36 +101,14 @@ for (let i = 0; i < a; i++) {
 ## MDX: Markdown + JSX
 
 Recently I came across MDX and found mostly what I was looking for: **a hybrid of Markdown and JSX**.
-It benefits from the simple writing style of Markdown, but allows custom components, including `@blueprintjs/core` components.
+It benefits from the simple writing style of Markdown, but allows custom components.
 
 ### Example
 
-```md
+````md
 ## Example: Callout
 
 As you can see this is otherwise normal Markdown.
-
-<Callout intent="success" icon="airplane">
-    <h5>MDX is Markdown with JSX</h5>
-    <p>MDX is Markdown with JSX</p>
-</Callout>
-
-Within your Markdown, import a JSX component and use it.
-```
-
-### Result
-
-<Card>
-As you can see this is otherwise normal Markdown.
-
-<Callout intent="success" icon="airplane">
-    <h5>MDX is Markdown with JSX</h5>
-    <p>MDX is Markdown with JSX</p>
-</Callout>
-
-Within your Markdown, import a JSX component and use it.
-
-</Card>
 
 ## How to use MDX
 
@@ -154,6 +130,7 @@ export default defineConfig({
     ],
 });
 ```
+````
 
 In my case, I lazily load the MDX files using React Suspense. This allows the content of the page to be loaded only when requested.
 
@@ -174,33 +151,6 @@ return (
 I was wanting to create a custom component called `<PresentCode>...</PresentCode>` that would render any content I want with an option to expand out a code block.
 This would have been helpful to show off some component's usage while also easily showing the exact code that generated it.
 At this current time, I am not able to parse the MDX between the component tags before they are rendered.
-
-In the case of a simple example:
-
-```tsx
-<PresentCode>
-    <Callout intent="success" icon="airplane">
-        <h5>MDX is Markdown with JSX</h5>
-        <p>MDX is Markdown with JSX</p>
-    </Callout>
-</PresentCode>
-```
-
-I was hoping to be able to make the component render both the `<Callout>` and the code that generated it:
-
-<Card>
-
-<Callout intent="success" icon="airplane">
-    <h5>MDX is Markdown with JSX</h5>
-    <p>MDX is Markdown with JSX</p>
-</Callout>
-```
-<Callout intent="success" icon="airplane">
-    <h5>MDX is Markdown with JSX</h5>
-    <p>MDX is Markdown with JSX</p>
-</Callout>
-```
-</Card>
 
 Remark and Rehype are popular and powerful tools for parsing Markdown and HTML respectively, but I have not been able to fully investigate a solution.
 Given the depth, I expect it is possible and an improvement for the future.

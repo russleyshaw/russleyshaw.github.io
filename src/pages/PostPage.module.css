@@ -1,3 +1,14 @@
+.root {
+    width: 600px;
+    align-self: center;
+
+    margin-top: 2em;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+}
+
 .heading {
     display: grid;
 
@@ -32,7 +43,6 @@
     h4,
     h5,
     h6 {
-        margin: 1rem 0 0.5rem 0;
         color: var(--color-primary);
     }
 
@@ -54,4 +64,12 @@
         font-weight: 600;
         color: var(--color-primary);
     }
+
+    code {
+        background-color: var(--color-background-dark);
+        padding: 0.25rem;
+        border-radius: 0.25rem;
+    }
+
+    margin-bottom: 2rem;
 }

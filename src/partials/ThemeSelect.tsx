@@ -1,4 +1,3 @@
-import { Button, ButtonGroup } from "@blueprintjs/core";
 import { observer } from "mobx-react";
 import { THEME_STORE, ThemeSetting } from "../models/theme";
 
@@ -6,25 +5,34 @@ export const ThemeSelect = observer(() => {
     const setting = THEME_STORE.userSetting.value;
 
     return (
-        <ButtonGroup>
-            <Button
-                active={setting === ThemeSetting.SYSTEM}
-                icon="desktop"
+        <div className="button-group small">
+            <button
+                type="button"
+                className="button"
                 title="System"
                 onClick={() => THEME_STORE.setUserSetting(ThemeSetting.SYSTEM)}
-            />
-            <Button
-                active={setting === ThemeSetting.LIGHT}
-                icon="lightbulb"
+                data-active={setting === ThemeSetting.SYSTEM}
+            >
+                System
+            </button>
+            <button
+                type="button"
+                className="button"
                 title="Light"
                 onClick={() => THEME_STORE.setUserSetting(ThemeSetting.LIGHT)}
-            />
-            <Button
-                active={setting === ThemeSetting.DARK}
-                icon="moon"
+                data-active={setting === ThemeSetting.LIGHT}
+            >
+                Light
+            </button>
+            <button
+                type="button"
+                className="button"
                 title="Dark"
                 onClick={() => THEME_STORE.setUserSetting(ThemeSetting.DARK)}
-            />
-        </ButtonGroup>
+                data-active={setting === ThemeSetting.DARK}
+            >
+                Dark
+            </button>
+        </div>
     );
 });
