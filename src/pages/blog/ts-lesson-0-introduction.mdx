@@ -1,20 +1,53 @@
-# A Brief History of JavaScript
+Early internet pages were static, often utilizing PHP to populate pages with content and HTML Forms to submit content back to a server.
+The desire for more interactivity grew and so did JavaScript.
 
-JavaScript was created in 1995 by Brendan Eich. It was developed to facilitate in-browser scripting.
+JavaScript is a dynamic, interpreted language with a C-like syntax.
+It specializes in event-driven programming, useful for handling server requests and user input in browsers.
+To achieve this, it is also asynchronous, using an [event loop](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Event_loop) to handle events and callbacks.
+Despite its asynchronous nature, it is single-threaded, meaning that only one piece of code can run at a time.
+
 Early JavaScript took many different forms, resulting in a standardization effort called ECMAScript, allowing multiple implementations of the language.
 One example of this standard was ActionScript, the language used by Adobe Flash.
 
 ![The book Learning ActionScript 3.0 by Rich Shupe with Zevan Rosser](/images/actionscript-book.webp "Nearly a relic in the timescale of JavaScript. (photo: Russley Shaw)")
 
-In 2008, Google released Chrome, an innovative, high-performance, auto-updating web browser with a fast JavaScript engine called V8.
-Later, as a response to Apache HTTP Server's poor performance, Ryan Dahl created Node.js, a JavaScript runtime built on top of Google Chrome's V8 JavaScript engine.
+When Google released Chrome, it came with a fast JavaScript engine called V8.
+Using V8 as a foundation [Ryan Dahl created Node.js](https://www.youtube.com/watch?v=ztspvPYybIY), a new JavaScript runtime built for server applications.
 As of 2023, JavaScript is heavily used in browsers and servers and provides an fast event-driven ecosystem to build atop.
-
 As single page applications (SPAs) grew in popularity, the desire to develop larger, safer JavaScript applications grew.
+
+# JavaScript
+
+Before the question of TypeScript can be explored, we need to justify JavaScript.
+Sometimes the mention of JavaScript carries the baggage of the past.
+It has changed significantly over the years and has become more than just a scripting language.
+
+The benefits to JavaScript are:
+
+## Ubiquity
+
+It's everywhere. Java and Flash promised a way to write code once and use it everywhere.
+Their usage has waned in that space; however, the next closest thing is JavaScript.
+Many libraries written are usable across many platforms: [Browsers](https://developer.mozilla.org/en-US/docs/Web/javascript), [Servers](https://bun.sh/), [Desktops](https://www.electronjs.org/), [Mobile](https://reactnative.dev/).
+
+## Ecosystem
+
+With the development of NodeJS, the Node Package Manager, NPM, became one of the largest package managers in the world.
+2,596,958 packages are available within NPM.
+54,656,040,683 package downloads in the last week as of writing.
+[Express](https://www.npmjs.com/package/express), a popular HTTP web framework for NodeJS has 27,884,637 weekly downloads.
+These libraries are popular for good reason.
+One popular libraries, [React](https://react.dev/) is used by many frameworks and platforms to develop highly responsive user interfaces.
+
+## Performance
+
+JavaScript is faster than you might expect. Google has invested large amounts of money into making JavaScript fast through the development of V8.
+New JS run-times are being built in Rust and Zig for increased performance.
+For example [Bun](https://bun.sh/) is a new runtime that claims to be up to several times faster than NodeJS.
 
 # TypeScript
 
-In 2012 Microsoft released a new language built on top of JavaScript to add static typing to JavaScript in an attempt to ease the burden of developing large applications in JavaScript.
+In 2014, Microsoft [released a v1 of a new language](https://devblogs.microsoft.com/typescript/announcing-typescript-1-0/) built on top of JavaScript to add static typing to JavaScript in an attempt to ease the burden of developing large applications in JavaScript.
 The language, called TypeScript, included a compiler that would strip type annotations from the TypeScript, converting it into JavaScript.
 Initially, TypeScript competed with Facebook's Flow, a static type checker for JavaScript.
 TypeScript continued to add advanced typing features, such as union types, intersection types, and generics.
