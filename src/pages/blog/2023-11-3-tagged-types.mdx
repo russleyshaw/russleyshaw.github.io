@@ -119,17 +119,3 @@ app.post("/user", async (req, res) => {
 ```
 
 Because we're not actually populating the `_tag` field (only making TS think we are), usage of a branded type incurs no run-time penalty.
-
-# Further Reading
-
-# Comments
-
-notes:
-
-> In the second example, does anything enforce that normalizeUsername is called? Like is it valid to call createUser("bob" as Username) - Jeremy Marr
-
-The idea is you call the normalization at the boundary layer. So for example, if you had an input field that allowed a user to type their username, you have no idea how its formatted, if there's a trailing space, etc. Normalizing it allows you to user `Username` everywhere.
-
-Otherwise, you have lots of functions that are like `createUser(username: string)` and you don't have a great idea of if it expects the username to be normalized beforehand, if it doesn't care, or if it does the normalization itself anyways.
-
-In a real example, `bob as Username` would probably be okay, but I'd probably ask in a review to have it go through the normalization just in case.
