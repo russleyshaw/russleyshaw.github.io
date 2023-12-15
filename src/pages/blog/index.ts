@@ -1,34 +1,19 @@
-import z from "zod";
-
 import { LazyExoticComponent } from "react";
 import { parse } from "date-fns";
 
-export const BlogFrontMatterSchema = z.object({
-    title: z.string(),
-    description: z.string(),
-    created: z.string(),
-    tags: z.array(z.string()),
-    author: z.string(),
-    slug: z.string(),
-});
+export interface BlogManifestEntry {
+    title: string;
+    description: string;
+    created: string;
+    tags: string[];
+    author: string;
+    slug: string;
 
-export type BlogFrontMatter = z.infer<typeof BlogFrontMatterSchema>;
-
-export interface BlogManifestEntry extends BlogFrontMatter {
     component: LazyExoticComponent<any>;
 }
 
 export interface BlogManifest {
     blogs: BlogManifestEntry[];
-}
-
-export function pathToSlug(filepath: string) {
-    // Get last part of path
-    const filename = filepath.split("/").pop()!;
-
-    // Remove extension
-    const slug = filename.replace(/\.[^.]+$/, "");
-    return slug;
 }
 
 export function getBlogRoute(slug: string) {

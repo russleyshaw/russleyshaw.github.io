@@ -22,6 +22,15 @@ const components = {
 
         return <pre {...props} />;
     },
+    img: (props: any) => {
+        console.log("Img", props);
+        return (
+            <div className={styles.contentImgContainer}>
+                <img {...props} />
+                {props.title && <span className={styles.caption}>{props.title}</span>}
+            </div>
+        );
+    },
 };
 
 export const PostPage = observer(() => {

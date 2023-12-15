@@ -2,7 +2,6 @@ import { formatDistanceToNow } from "date-fns";
 import { observer } from "mobx-react";
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
 import { getBlogRoute, parseCreatedDate } from "./blog";
 import { APP_DISPLAY_NAME } from "../config";
 import { useTitle } from "../lib/hooks";
@@ -11,29 +10,17 @@ import manifest from "./blog/manifest";
 import NewBadge from "../components/NewBadge";
 import { AnimatePresence, motion } from "framer-motion";
 
-const RootDiv = styled.div`
-    width: 600px;
-    align-self: center;
-`;
-
-const PostsDiv = styled(motion.div)`
-    display: flex;
-    flex-direction: column;
-
-    margin-top: 2em;
-
-    gap: 1em;
-`;
+import styles from "./HomePage.module.css";
 
 export const HomePage = observer(() => {
     useTitle(`Home | ${APP_DISPLAY_NAME}`);
 
-    const blogs = sortBy(manifest.blogs, (b) => parseCreatedDate(b.created)).reverse();
+    const blogs = sortBy(manifest.blogs, b => parseCreatedDate(b.created)).reverse();
 
     return (
-        <RootDiv>
-            <PostsDiv>
-                {blogs.map((meta) => (
+        <div className={styles.root}>
+            <div className={styles.posts}>
+                {blogs.map(meta => (
                     <PostEntry
                         created={meta.created}
                         description={meta.description}
@@ -43,63 +30,12 @@ export const HomePage = observer(() => {
                         key={meta.slug}
                     />
                 ))}
-            </PostsDiv>
-        </RootDiv>
+            </div>
+        </div>
     );
 });
 
 const NEW_POST_THRESHOLD_MS = 1000 * 60 * 60 * 24 * 7;
-
-const NewBadgeDiv = styled.div`
-    position: absolute;
-    top: 0;
-    right: 0;
-
-    transform: translate(50%, -50%) rotate(30deg);
-`;
-
-const PostEntryDiv = styled(motion.div)`
-    position: relative;
-    display: grid;
-
-    grid-template:
-        "title tags" auto
-        "description date" auto / 1fr auto;
-    gap: 0.5em;
-
-    background-color: rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 1em;
-    padding: 1em;
-
-    &:hover {
-        box-shadow: 0.2em 0.2em 0.25em rgba(0, 0, 0, 0.2);
-    }
-`;
-
-const PostEntryTitle = styled.h3`
-    grid-area: title;
-`;
-
-const PostEntryDescription = styled.span`
-    grid-area: description;
-    font-size: 0.9em;
-`;
-
-const PostEntryTags = styled.div`
-    grid-area: tags;
-
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    flex-wrap: wrap;
-    gap: 0.2em;
-`;
-
-const PostEntryDate = styled.span`
-    grid-area: date;
-    justify-self: end;
-`;
 
 interface PostEntryProps {
     slug: string;
@@ -125,7 +61,8 @@ const PostEntry = observer((props: PostEntryProps) => {
     const createdAt = new Date(created);
     const createdAtText = formatDistanceToNow(createdAt, { addSuffix: true });
     return (
-        <PostEntryDiv
+        <motion.div
+            className={styles.postEntry}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
             onClick={onClick}
@@ -142,18 +79,18 @@ const PostEntry = observer((props: PostEntryProps) => {
                 x: 20,
             }}
         >
-            <NewBadgeDiv>
+            <div className={styles.newBadge}>
                 <AnimatePresence>{isNew && <NewBadge wiggle={hovered} />}</AnimatePresence>
-            </NewBadgeDiv>
+            </div>
 
-            <PostEntryTitle>{title}</PostEntryTitle>
-            <PostEntryDescription>{description}</PostEntryDescription>
-            <PostEntryTags>
-                {tags.map((t) => (
+            <h3 className={styles.title}>{title}</h3>
+            <div className={styles.description}>{description}</div>
+            <div className={styles.tags}>
+                {tags.map(t => (
                     <div className="badge">{t}</div>
                 ))}
-            </PostEntryTags>
-            <PostEntryDate>{createdAtText}</PostEntryDate>
-        </PostEntryDiv>
+            </div>
+            <div className={styles.postDate}>{createdAtText}</div>
+        </motion.div>
     );
 });

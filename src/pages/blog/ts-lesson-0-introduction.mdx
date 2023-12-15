@@ -1,0 +1,238 @@
+# A Brief History of JavaScript
+
+JavaScript was created in 1995 by Brendan Eich. It was developed to facilitate in-browser scripting.
+Early JavaScript took many different forms, resulting in a standardization effort called ECMAScript, allowing multiple implementations of the language.
+One example of this standard was ActionScript, the language used by Adobe Flash.
+
+![The book Learning ActionScript 3.0 by Rich Shupe with Zevan Rosser](/images/actionscript-book.webp "Nearly a relic in the timescale of JavaScript. (photo: Russley Shaw)")
+
+In 2008, Google released Chrome, an innovative, high-performance, auto-updating web browser with a fast JavaScript engine called V8.
+Later, as a response to Apache HTTP Server's poor performance, Ryan Dahl created Node.js, a JavaScript runtime built on top of Google Chrome's V8 JavaScript engine.
+As of 2023, JavaScript is heavily used in browsers and servers and provides an fast event-driven ecosystem to build atop.
+
+As single page applications (SPAs) grew in popularity, the desire to develop larger, safer JavaScript applications grew.
+
+# TypeScript
+
+In 2012 Microsoft released a new language built on top of JavaScript to add static typing to JavaScript in an attempt to ease the burden of developing large applications in JavaScript.
+The language, called TypeScript, included a compiler that would strip type annotations from the TypeScript, converting it into JavaScript.
+Initially, TypeScript competed with Facebook's Flow, a static type checker for JavaScript.
+TypeScript continued to add advanced typing features, such as union types, intersection types, and generics.
+
+The tipping point was likely the addition of strict null type checking introduced in TypeScript 2.0.
+This compiler flag differentiated nullable and non-nullable types, a [major pain point for developers](https://en.wikipedia.org/wiki/Null_pointer#History).
+
+The philosophy of TypeScript was to be a strict superset of JavaScript, meaning that all JavaScript is valid TypeScript.
+This philosophy continues to this day and TypeScript strives for 100% compatibility.
+
+![A snippet of TypeScript code.](/images/ts-code-photo.webp "Interfaces are your friends :)")
+
+# Choosing TypeScript
+
+As mentioned earlier, the creation of TypeScript was fueled by the ever-growing complexity of web sites.
+No longer static pages, forms, or blogs, web sites began to deliver rich, interactive, data-driven experiences functioning closer to desktop applications than traditional sites.
+
+Because of how JavaScript handles strings and numbers, in old JavaScript it was common to use the two interchangeably.
+
+```javascript
+const yourAge = getAge(); // "25", the string
+const friendAge = getFriendAge(); // 30, the number
+
+const minDrinkingAge = 21;
+
+console.log(`Your combined age is ${yourAge + friendAge}`);
+// "Your combined age is 2530"
+
+if (yourAge >= minDrinkingAge) {
+    // Can drink!
+}
+```
+
+We can compare `"25"` to `30` and it will work. This is because JavaScript will coerce the string into a number.
+When we try adding the ages together, JavaScript will coerce the number into a string and concatenate them.
+We can avoid this using static typing.
+
+```javascript
+// Only allow numbers
+function add(...ages: number[]) {
+    return ages.reduce((a, b) => a + b, 0);
+}
+
+console.log(`Your combined age is ${add(yourAge, friendAge)}`);
+// Error: Argument of type 'string' is
+// not assignable to parameter of type 'number'
+
+```
+
+TypeScript helps us out by providing a way to describe the shape of our data and the types of our functions.
+For those coming from dynamically typed languages, there seems to be a regular fear of having to 'maintain the types'.
+Typescript eases these fears by providing:
+
+-   Strong inferencing capabilities
+-   Flow sensitive typing
+-   Escapability of types
+
+## Strong Inferencing Capabilities
+
+The best TypeScript is the TypeScript the compiler already knows. C# has `var`. C++ has `auto`. TypeScript has `let` and `const`.
+Consider the following:
+
+<div style={{ textAlign: "center" }}>Is the code below TypeScript or JavaScript?</div>
+
+```typescript
+const myName = getMyName();
+console.log(`My name is ${myName.length} chars long!`);
+```
+
+From a glance, they're the same in this instance. That's because TypeScript is able to infer the type returned from `getMyName`.
+By inferring the type, we don't have to explicitly declare it unless we wanted to.
+This comes in handy for many situations. The goal is to write as little "TypeScript" as possible and let the compiler do all the work.
+
+Places where providing explicit types shine are at the boundaries of your application, such as APIs, libraries, and interfaces.
+
+```typescript
+interface User {
+    id: number;
+    name: string;
+    email: string;
+}
+
+// We can provide a return type if we want
+function getUser(id: number): User {
+    // ...
+}
+
+// Parameter types keep us from passing the wrong type
+const me = getUser(1);
+
+// TypeScript can infer the return type from what is actually returned
+function getMyName() {
+    return me.name; // TypeScript knows me is a User
+}
+```
+
+Aside from the two type annotations and the interface, this is identical to JavaScript.
+
+## Flow Sensitive Typing
+
+TypeScript uses [Flow Sensitive Typing] to aid in type resolution. This effectively means by using if statements and other flow-controls, TypeScript can narrow the type based on the conditional.
+One common use of this is to check for null or undefined values.
+
+```typescript
+const me = maybeGetUser(1);
+// me: User | undefined
+
+if (me) {
+    // me: User
+    console.log(me.name);
+}
+
+// me: User | undefined
+```
+
+In this example, the user `me` is retrieved, but we don't know if it exists.
+If we check its existence, TypeScript will narrow the type to `User` within the if statement, knowing that if the if statement is true, `me` must be a `User`.
+
+### Escapability of Types
+
+TypeScript is a superset of JavaScript, meaning that all JavaScript is valid TypeScript. Although it is good practice to avoid it, it is possible to escape from TypeScript using the `any` type.
+Your linter will probably kick and scream. But in the event when all else fails, sometimes its easier to limit the spread of `any` to a single function, removing all type checking from it, and explicitly typing it yourself.
+The type system is very expressive and most likely there is a way to express almost any type.
+
+One example where `any` can be useful is working with a library with no type definitions and you don't want to write and maintain them yourself.
+
+```typescript
+declare const OldLibrary: any;
+
+OldLibrary.on("event", () => {
+    // ...
+});
+```
+
+Of course here, we lose the introspection ability of TypeScript on `OldLibrary`, but this at least allows us to use it.
+Maybe in the future it is deemed important enough to write type definitions for `OldLibrary` and we can remove the `any` type.
+Often times this process of conversion of JavaScript to TypeScript results in finding bugs in our usage of it.
+
+# Getting Started
+
+In general, the workflow for any TypeScript project is to **write TypeScript code, compile it to JavaScript, and run the JavaScript**.
+There are some projects that intend to run the TypeScript directly, but currently you will most likely be compiling it to JavaScript, even if not directly through the TypeScript compiler (such as Vite or other bundlers)
+
+Whether you're developing server applications with NodeJS, web apps in a browser, or Desktop apps with Electron, you will likely need to take advantage of the ecosystem of tooling provided by **NodeJS and NPM**, the Node Package Manager.
+This is also true for TypeScript, which is installed from NPM.
+
+## Install NodeJS
+
+NodeJS versions move fast and within a single year there can be several major releases with 2 long-term support (LTS) releases. Because of this, ease of switching NodeJS versions is beneficial.
+
+[Install Volta](https://volta.sh), a tool for managing NodeJS versions
+Volta will significantly ease NodeJS version management, especially when working on multiple projects with different NodeJS versions.
+Simply follow the instructions on the site.
+Once installed, when you run `node` or `npm` in a project, Volta will automatically install the correct version of NodeJS and NPM for that project.
+
+![Node JS Release Schedule](https://raw.githubusercontent.com/nodejs/Release/main/schedule.svg?sanitize=true "Releases are regular, even the LTSs")
+
+## Starting a Project
+
+Once NodeJS is installed, we can setup our project.
+NPM has an init command that will walk us through the process of creating a `package.json` file.
+
+```bash
+npm init
+```
+
+Then we can install TypeScript to our project.
+We'll install it as a development dependency, meaning it won't be included in the final product.
+
+```bash
+npm install --save-dev typescript
+```
+
+We can also initialize a TypeScript config file `tsconfig.json`.
+Note: `npx` is just a tool that will run a command from a package in the current directory.
+
+```bash
+npx tsc --init
+```
+
+Finally we can write some TypeScript code and compile it to JavaScript. Create a new file `main.ts` and add the following:
+
+```typescript
+function main(): void {
+    console.log("Hello, world!");
+}
+
+main();
+```
+
+To compile your new TypeScript code, run the following, we invoke the `tsc` command, which is the TypeScript Compiler.
+
+```bash
+npx tsc
+```
+
+This will create a new file `main.js` with the following contents:
+
+```javascript
+function main() {
+    console.log("Hello, world!");
+}
+main();
+```
+
+Congratulations! You've written your first TypeScript program!
+To run it, run it like any other JavaScript program. In this case, we can use NodeJS to run it.
+
+```bash
+node main.js
+# Hello, world!
+```
+
+## More Reading
+
+-   [TypeScript](https://www.typescriptlang.org/)
+    -   [Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
+    -   [Playground](https://www.typescriptlang.org/play)
+    -   [Cheatsheet - Very Useful!](https://www.typescriptlang.org/cheatsheets)
+-   [NodeJS](https://nodejs.org/en/)
+-   [Flow Sensitive Typing](https://en.wikipedia.org/wiki/Flow-sensitive_typing)

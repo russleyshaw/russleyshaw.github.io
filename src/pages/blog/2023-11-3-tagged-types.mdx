@@ -1,20 +1,9 @@
----
-title: Tagged Types
-description: Guard against unintended usage of primative types.
-author: Russley Shaw
-tags:
-    - typescript
-    - arrays
-created: 2023-11-3
-slug: tagged-types
----
-
-
 Also known as type branding.
 
 We can give a specific name to a type and guard against functions being called with a pure string, number, etc.
 
 # The Problem
+
 ```ts
 type Username = string;
 type Street = string;
@@ -25,6 +14,7 @@ let myStreet: Street = "90th";
 // This shouldn't be allowed
 myName = myStreet;
 ```
+
 Realistically, usernames & streets shouldn't overlap.
 
 There are a few different use cases for this.
@@ -34,100 +24,99 @@ They generally are when you have a value that you wish to have a specific meanin
 Or, put another way:  
 When you want to express a precondition as a type.
 
-
 Our Savior TypeScript
+
 ```ts
 export type Tag<T extends string> = { _tag: T };
 
-export type Tagged<
-	BaseType,
-	T extends string
-> = BaseType & Tag<T>;
+export type Tagged<BaseType, T extends string> = BaseType & Tag<T>;
 ```
 
-
 # Example
+
 Handling percentages
 
-
 Sometimes we end up juggling two different representations of a scalar value:
-- factors: 0 - 1
-- percentages: 0 - 100
 
+-   factors: 0 - 1
+-   percentages: 0 - 100
 
 Yet both of these are numbers and are otherwise indistinguishable. With branded types, we can callout a percent as a distinct type; so anywhere we want to use a `Percent`, we can assert it as such.
-
 
 ```ts
 type Percent = Tagged<number, "Percent">; // 0-100%
 
 function calcTestPoints(points: number, pct: Percent): number {
-	return points * pct / 100;
+    return (points * pct) / 100;
 }
 ```
 
 John got a 85% on a test worth 43 points.
+
 ```ts
 // Bad: Argument of type 'number' is not
 //      assignable to parameter of type 'Percent'.
-const johnGrade = calcTestPoints(43, 85); 
+const johnGrade = calcTestPoints(43, 85);
 
-// Good: 
+// Good:
 const johnGrade = calcTestPoints(43, 85 as Percent);
 ```
 
 # Example
-Normalizing usernames
 
+Normalizing usernames
 
 Similar idea as percentages: we have usernames, which are represented by strings.
 
 Because usernames are often used as keys, we likely want to normalize the username so that we don't have duplicate keys for the same user.
 
-
 Define a username
+
 ```ts
 type Username = Tagged<string, "Username">; // shawr
 
 function normalizeUsername(username: string): Username {
-	return username.trim().toLowercase() as Username;
+    return username.trim().toLowercase() as Username;
 }
 ```
 
 Utility that accepts a username.
+
 ```ts
 // Gets if username exists; CASE & SPACE SENSITIVE
 async function checkIfUserExists(username: Username) {}
 ```
+
 Sensitive to the input we provide.
 
 We want to use the utility
+
 ```ts
 async function createUser(username: Username) {
-	// We can assume the username is
-	// already normalized because of the type.
-	if(await checkIfUsernameExists(username)) {
-		return;
-	}
+    // We can assume the username is
+    // already normalized because of the type.
+    if (await checkIfUsernameExists(username)) {
+        return;
+    }
 
-	// Continue to create user.
+    // Continue to create user.
 }
 ```
+
 We only want to normalize once.
 
 We normalize at the boundary layer
+
 ```ts
 // POST /user - Create a new user if it doesn't already exist.
 app.post("/user", async (req, res) => {
-	
-	// ^^^^ Unsafe, unvalidated
-	const user = normalizeUsername(req.username);
-	// vvvv Safe, validated
+    // ^^^^ Unsafe, unvalidated
+    const user = normalizeUsername(req.username);
+    // vvvv Safe, validated
 
-	await createUser(user);
-})
+    await createUser(user);
+});
 ```
-
 
 Because we're not actually populating the `_tag` field (only making TS think we are), usage of a branded type incurs no run-time penalty.
 
@@ -139,8 +128,8 @@ notes:
 
 > In the second example, does anything enforce that normalizeUsername is called? Like is it valid to call createUser("bob" as Username) - Jeremy Marr
 
-The idea is you call the normalization at the boundary layer. So for example, if you had an input field that allowed a user to type their username, you have no idea how its formatted, if there's a trailing space, etc. Normalizing it allows you to user `Username` everywhere. 
+The idea is you call the normalization at the boundary layer. So for example, if you had an input field that allowed a user to type their username, you have no idea how its formatted, if there's a trailing space, etc. Normalizing it allows you to user `Username` everywhere.
 
-Otherwise, you have lots of functions that are like `createUser(username: string)` and you don't have a great idea of if it expects the username to be normalized beforehand, if it doesn't care, or if it does the normalization itself anyways. 
+Otherwise, you have lots of functions that are like `createUser(username: string)` and you don't have a great idea of if it expects the username to be normalized beforehand, if it doesn't care, or if it does the normalization itself anyways.
 
 In a real example, `bob as Username` would probably be okay, but I'd probably ask in a review to have it go through the normalization just in case.

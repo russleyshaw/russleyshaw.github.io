@@ -1,17 +1,30 @@
-import { BlogManifest } from ".";
+import { BlogManifest, BlogManifestEntry } from ".";
 import { lazy } from "react";
+
+const lessons = [
+    {
+        title: "TS 0: Introduction",
+        description: "Introduction to TypeScript",
+        created: "2023-12-14",
+        tags: ["typescript", "lesson"],
+        author: "Russley Shaw",
+        component: lazy(() => import("./ts-lesson-0-introduction.mdx")),
+        slug: "ts-lesson-0-introduction",
+    },
+] satisfies BlogManifestEntry[];
 
 export default {
     blogs: [
-        {
-            title: "CSS Layouts",
-            description: "Flex, Grid, Floats, and more",
-            created: "2023-12-15",
-            tags: ["css"],
-            author: "Russley Shaw",
-            component: lazy(() => import("./2023-12-15-css-layouts.mdx")),
-            slug: "css-layouts",
-        },
+        ...lessons,
+        // {
+        //     title: "CSS Layouts",
+        //     description: "Flex, Grid, Floats, and more",
+        //     created: "2023-12-15",
+        //     tags: ["css"],
+        //     author: "Russley Shaw",
+        //     component: lazy(() => import("./2023-12-15-css-layouts.mdx")),
+        //     slug: "css-layouts",
+        // },
         {
             title: "MDX is Markdown++",
             description: "MDX is Markdown with JSX",
@@ -30,24 +43,24 @@ export default {
             component: lazy(() => import("./2023-11-3-tagged-types.mdx")),
             slug: "tagged-types",
         },
-        {
-            title: "Heads and Tails",
-            description: "Get the first element and the rest of an array",
-            created: "2023-9-30",
-            tags: ["typescript", "arrays"],
-            author: "Russley Shaw",
-            component: lazy(() => import("./2023-9-30-head-tail.mdx")),
-            slug: "heads-and-tails",
-        },
-        {
-            title: "Minimizing Ambiguous Types in TypeScript",
-            description:
-                "Optimizing TypeScript code by limiting the usage of any and undefined types to the smallest possible scope.",
-            created: "2023-01-01",
-            tags: ["typescript"],
-            author: "Russley Shaw",
-            component: lazy(() => import("./2023-10-6-ambiguous-types.mdx")),
-            slug: "any-small-scope",
-        },
+        // {
+        //     title: "Heads and Tails",
+        //     description: "Get the first element and the rest of an array",
+        //     created: "2023-9-30",
+        //     tags: ["typescript", "arrays"],
+        //     author: "Russley Shaw",
+        //     component: lazy(() => import("./2023-9-30-head-tail.mdx")),
+        //     slug: "heads-and-tails",
+        // },
+        // {
+        //     title: "Minimizing Ambiguous Types in TypeScript",
+        //     description:
+        //         "Optimizing TypeScript code by limiting the usage of any and undefined types to the smallest possible scope.",
+        //     created: "2023-01-01",
+        //     tags: ["typescript"],
+        //     author: "Russley Shaw",
+        //     component: lazy(() => import("./2023-10-6-ambiguous-types.mdx")),
+        //     slug: "any-small-scope",
+        // },
     ],
 } satisfies BlogManifest;
