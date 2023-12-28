@@ -1,18 +1,18 @@
 import { observer } from "mobx-react";
 
 import { APP_DISPLAY_NAME } from "../config";
-import { NavLink } from "react-router-dom";
 import { ThemeSelect } from "./ThemeSelect";
 
 import styles from "./Navbar.module.css";
+import { Link } from "@tanstack/react-router";
 
 export const Navbar = observer(() => {
     return (
         <div className={styles.root}>
             <div>
-                <NavLink className={styles.siteTitle} to="/">
+                <Link className={styles.siteTitle} to="/">
                     {APP_DISPLAY_NAME}
-                </NavLink>
+                </Link>
             </div>
 
             <div>

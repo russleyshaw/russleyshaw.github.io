@@ -1,21 +1,39 @@
-import { BlogManifest, BlogManifestEntry } from ".";
-import { lazy } from "react";
+import { BlogManifest, BlogManifestEntry, importMdx } from ".";
 
-const lessons = [
+export const TS_LESSONS = [
     {
-        title: "TS 0: Introduction",
-        description: "Introduction to TypeScript",
+        title: "TS 0: A TypeScript Vision",
+        description: "An Introduction and Motivation to TypeScript",
         created: "2023-12-14",
+        updated: "2023-12-22",
         tags: ["typescript", "lesson"],
         author: "Russley Shaw",
-        component: lazy(() => import("./ts-lesson-0-introduction.mdx")),
+        component: importMdx(() => import("./ts-lesson-0-introduction.mdx")),
         slug: "ts-lesson-0-introduction",
+    },
+    {
+        title: "TS 1: Basic Types",
+        description: "Learn the basic types in TypeScript",
+        created: "2023-12-22",
+        tags: ["typescript", "lesson"],
+        author: "Russley Shaw",
+        component: importMdx(() => import("./ts-lesson-1-simple-types.mdx")),
+        slug: "ts-lesson-1-simple-types",
     },
 ] satisfies BlogManifestEntry[];
 
-export default {
+export const BLOG_MANIFEST = {
     blogs: [
-        ...lessons,
+        ...TS_LESSONS,
+        {
+            title: "Diagrams as Code",
+            description: "Using Mermaid to create diagrams in Markdown",
+            created: "2023-12-27",
+            tags: ["typescript", "mermaid"],
+            author: "Russley Shaw",
+            component: importMdx(() => import("./2023-12-27-diagrams-as-code.mdx")),
+            slug: "diagrams-as-code",
+        },
         // {
         //     title: "CSS Layouts",
         //     description: "Flex, Grid, Floats, and more",
@@ -31,7 +49,7 @@ export default {
             created: "2023-12-4",
             tags: ["typescript", "mdx"],
             author: "Russley Shaw",
-            component: lazy(() => import("./2023-12-4-mdx-is-mdpp.mdx")),
+            component: importMdx(() => import("./2023-12-4-mdx-is-mdpp.mdx")),
             slug: "mdx-is-mdpp",
         },
         {
@@ -40,7 +58,7 @@ export default {
             created: "2023-11-3",
             tags: ["typescript", "arrays"],
             author: "Russley Shaw",
-            component: lazy(() => import("./2023-11-3-tagged-types.mdx")),
+            component: importMdx(() => import("./2023-11-3-tagged-types.mdx")),
             slug: "tagged-types",
         },
         // {

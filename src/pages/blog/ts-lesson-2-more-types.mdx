@@ -1,0 +1,45 @@
+import { MultipleChoiceQuiz as MCQuiz } from "../../components/MultipleChoiceQuiz";
+import { FillBlankQuiz as FBQuiz } from "../../components/FillBlankQuiz";
+
+# Contents
+
+# Union Types
+
+Union types are types that can be one of several types. They are defined using the `|` operator.
+
+```ts
+let foo2: number | string = 1;
+foo2 = "3";
+foo2 = true; // Error: Type 'true' is not assignable to type 'string | number'.
+```
+
+# Type Aliases
+
+Type aliases are a way to give a type a name.
+They are defined using the `type` keyword.
+One common use case is to define a type for a callback function.
+
+```ts
+type ErrorCallback = (err: Error) => void;
+
+const myCallback: ErrorCallback = (err) => {
+    console.error(err);
+};
+```
+
+# Interfaces
+
+# Optional Types
+
+A type can be marked as optional by using the `?` operator. An optional
+type can also be `undefined` if it is not provided.
+
+```ts
+let reference?: number;
+console.log(reference); // undefined
+
+reference = 1;
+console.log(reference); // 1
+```
+
+# Function Types

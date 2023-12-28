@@ -61,4 +61,7 @@
 .postDate {
     grid-area: date;
     justify-self: end;
+
+    font-size: 0.8em;
+    opacity: 0.5;
 }

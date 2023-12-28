@@ -24,6 +24,14 @@
     --color-background: #f5f5f5;
     --color-background-dark: #e0e0e0;
 
+    --color-success: hsl(120, 75%, 57%);
+    --color-success-light: hsl(120, 75%, 67%);
+    --color-success-dark: hsl(120, 75%, 47%);
+
+    --color-error: hsl(0, 75%, 57%);
+    --color-error-light: hsl(0, 75%, 67%);
+    --color-error-dark: hsl(0, 75%, 47%);
+
     --font-family: "Roboto", sans-serif;
 }
 
@@ -35,6 +43,14 @@
 
     --color-text: hsl(0, 0%, 100%);
 
-    --color-background: #333333;
+    --color-background: hsl(0, 0%, 10%);
     --color-background-dark: #222222;
+
+    --color-success: hsl(120, 75%, 57%);
+    --color-success-light: hsl(120, 75%, 67%);
+    --color-success-dark: hsl(120, 75%, 47%);
+
+    --color-error: hsl(0, 75%, 57%);
+    --color-error-light: hsl(0, 75%, 67%);
+    --color-error-dark: hsl(0, 75%, 47%);
 }

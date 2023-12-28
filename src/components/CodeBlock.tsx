@@ -5,9 +5,7 @@ import "../lib/highlight";
 import hljs from "highlight.js";
 
 import { useCallback, useMemo, useState } from "react";
-import { styled } from "styled-components";
 import { trimLines } from "../lib/string";
-import { OpenInPlayground } from "./OpenInPlayground";
 
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -17,18 +15,19 @@ export interface CodeBlockProps {
     filename?: string;
     language?: string;
     code?: string;
+    actions?: boolean;
 }
 
-export const CodeBlock = observer((props: CodeBlockProps) => {
+export default observer((props: CodeBlockProps) => {
     const [copied, setCopied] = useState(false);
     const [hovered, setHovered] = useState(false);
 
-    const { code = "", language } = props;
+    const { code = "", language, actions = true } = props;
 
     const trimmedCode = useMemo(() => trimLines(code ?? ""), [code]);
     const highlighted = useMemo(() => {
         return hljs.highlight(trimmedCode, { language: language ?? "typescript" });
-    }, [trimmedCode]);
+    }, [trimmedCode, language]);
 
     const onCopyClick = useCallback(() => {
         navigator.clipboard.writeText(trimmedCode);
@@ -49,39 +48,42 @@ export const CodeBlock = observer((props: CodeBlockProps) => {
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
         >
-            <AnimatePresence>
-                {hovered && (
-                    <motion.div
-                        className={styles.actions}
-                        initial={{
-                            right: -100,
-                            opacity: 0,
-                        }}
-                        animate={{
-                            right: 0,
-                            opacity: 1,
-                        }}
-                        transition={{
-                            duration: 0.5,
-                        }}
-                        exit={{
-                            right: -100,
-                            opacity: 0,
-                        }}
-                    >
-                        <button type="button" className="button" onClick={onCopyClick}>
-                            {copied ? "Copied!" : "Copy"}
-                        </button>
-                        {showOpenInPlayground && (
-                            <button type="button" className="button">
-                                TS Playground
+            {actions && (
+                <AnimatePresence>
+                    {hovered && (
+                        <motion.div
+                            className={styles.actions}
+                            initial={{
+                                right: -100,
+                                opacity: 0,
+                            }}
+                            animate={{
+                                right: 0,
+                                opacity: 1,
+                            }}
+                            transition={{
+                                duration: 0.5,
+                            }}
+                            exit={{
+                                right: -100,
+                                opacity: 0,
+                            }}
+                        >
+                            <button type="button" className="button" onClick={onCopyClick}>
+                                {copied ? "Copied!" : "Copy"}
                             </button>
-                        )}
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                            {showOpenInPlayground && (
+                                <button type="button" className="button">
+                                    TS Playground
+                                </button>
+                            )}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            )}
 
             <pre>
+                {/* biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation> */}
                 <code dangerouslySetInnerHTML={{ __html: highlighted.value }} />
             </pre>
         </div>

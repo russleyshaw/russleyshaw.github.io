@@ -1,0 +1,56 @@
+:root {
+    --border-color: var(--color-text);
+    --border-color-pressed: var(--color-primary);
+    --focus-ring-color: var(--color-primary);
+    --highlight-background: var(--color-primary-light);
+    --highlight-background-pressed: var(--color-primary-dark);
+    --highlight-foreground: var(--color-primary-text);
+}
+
+.react-aria-RadioGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: var(--text-color);
+}
+
+.react-aria-Radio {
+    display: flex;
+    align-items: center;
+    gap: 0.571rem;
+    font-size: 1.143rem;
+    color: var(--text-color);
+    forced-color-adjust: none;
+
+    &:before {
+        content: "";
+        display: block;
+        width: 1.286rem;
+        height: 1.286rem;
+        box-sizing: border-box;
+        border: 0.143rem solid var(--border-color);
+        background: var(--field-background);
+        border-radius: 1.286rem;
+        transition: all 200ms;
+    }
+
+    &[data-pressed]:before {
+        border-color: var(--border-color-pressed);
+    }
+
+    &[data-selected] {
+        &:before {
+            border-color: var(--highlight-background);
+            border-width: 0.429rem;
+        }
+
+        &[data-pressed]:before {
+            border-color: var(--highlight-background-pressed);
+        }
+    }
+
+    &[data-focus-visible]:before {
+        outline: 2px solid var(--focus-ring-color);
+        outline-offset: 2px;
+    }
+}

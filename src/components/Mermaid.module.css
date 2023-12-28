@@ -1,0 +1,13 @@
+.root {
+    text-align: center;
+}
+
+.container {
+    position: relative;
+}
+
+.buttons {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}

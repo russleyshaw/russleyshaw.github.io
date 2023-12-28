@@ -1,15 +1,21 @@
-import { LazyExoticComponent } from "react";
 import { parse } from "date-fns";
+
+export type MdxImport = typeof import("*.mdx");
+
+export function importMdx(fn: () => Promise<MdxImport>) {
+    return () => fn().then((v) => v.default);
+}
 
 export interface BlogManifestEntry {
     title: string;
     description: string;
     created: string;
+    updated?: string;
     tags: string[];
     author: string;
     slug: string;
 
-    component: LazyExoticComponent<any>;
+    component: ReturnType<typeof importMdx>;
 }
 
 export interface BlogManifest {
@@ -25,7 +31,7 @@ export function parseCreatedDate(created: string) {
 }
 
 export function getBlogEntry(manifest: BlogManifest, slug: string) {
-    const entry = manifest.blogs.find(blog => blog.slug === slug);
+    const entry = manifest.blogs.find((blog) => blog.slug === slug);
     if (!entry) {
         throw new Error(`No blog entry found for ${slug}`);
     }

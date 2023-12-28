@@ -1,28 +1,33 @@
 import { formatDistanceToNow } from "date-fns";
+import { AnimatePresence, motion } from "framer-motion";
+import { sortBy } from "lodash";
 import { observer } from "mobx-react";
 import { useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getBlogRoute, parseCreatedDate } from "./blog";
-import { APP_DISPLAY_NAME } from "../config";
-import { useTitle } from "../lib/hooks";
-import { sortBy } from "lodash";
-import manifest from "./blog/manifest";
 import NewBadge from "../components/NewBadge";
-import { AnimatePresence, motion } from "framer-motion";
+import { APP_DISPLAY_NAME } from "../config";
+import { useTitle } from "../lib/react";
+import { parseCreatedDate } from "./blog";
 
+import { useNavigate } from "@tanstack/react-router";
 import styles from "./HomePage.module.css";
+import { BLOG_MANIFEST } from "./blog/manifest";
 
 export const HomePage = observer(() => {
     useTitle(`Home | ${APP_DISPLAY_NAME}`);
 
-    const blogs = sortBy(manifest.blogs, b => parseCreatedDate(b.created)).reverse();
+    const blogs = sortBy(BLOG_MANIFEST.blogs, (b) => {
+        if (b.updated) return parseCreatedDate(b.updated);
+
+        return parseCreatedDate(b.created);
+    }).reverse();
 
     return (
         <div className={styles.root}>
             <div className={styles.posts}>
-                {blogs.map(meta => (
+                {blogs.map((meta) => (
                     <PostEntry
                         created={meta.created}
+                        updated={meta.updated}
                         description={meta.description}
                         slug={meta.slug}
                         tags={meta.tags}
@@ -42,24 +47,25 @@ interface PostEntryProps {
     title: string;
     description: string;
     created: string;
+    updated?: string;
     tags: string[];
 }
 
 const PostEntry = observer((props: PostEntryProps) => {
-    const { slug, title, tags, description, created } = props;
+    const { slug, title, tags, description, created, updated } = props;
 
     const [hovered, setHovered] = useState(false);
 
     const navigate = useNavigate();
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     const onClick = useCallback(() => {
-        navigate(getBlogRoute(slug));
+        navigate({ to: "/blog/$slug", params: { slug } });
     }, [slug]);
 
-    const isNew = Date.now() - parseCreatedDate(created).getTime() < NEW_POST_THRESHOLD_MS;
+    const updatedDate = updated ? parseCreatedDate(updated) : parseCreatedDate(created);
 
-    const createdAt = new Date(created);
-    const createdAtText = formatDistanceToNow(createdAt, { addSuffix: true });
+    const isNew = Date.now() - updatedDate.getTime() < NEW_POST_THRESHOLD_MS;
+
     return (
         <motion.div
             className={styles.postEntry}
@@ -86,11 +92,28 @@ const PostEntry = observer((props: PostEntryProps) => {
             <h3 className={styles.title}>{title}</h3>
             <div className={styles.description}>{description}</div>
             <div className={styles.tags}>
-                {tags.map(t => (
-                    <div className="badge">{t}</div>
+                {tags.map((t) => (
+                    <div key={t} className="badge">
+                        {t}
+                    </div>
                 ))}
             </div>
-            <div className={styles.postDate}>{createdAtText}</div>
+            <div className={styles.postDate}>{getDateContents()}</div>
         </motion.div>
     );
+
+    function getDateContents() {
+        if (props.updated) {
+            const updatedAt = formatDistanceToNow(new Date(props.updated), {
+                addSuffix: true,
+            });
+            return `Updated ${updatedAt}`;
+        }
+
+        const createdAt = formatDistanceToNow(new Date(props.created), {
+            addSuffix: true,
+        });
+
+        return `Created ${createdAt}`;
+    }
 });

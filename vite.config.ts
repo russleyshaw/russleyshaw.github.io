@@ -1,6 +1,8 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import mdx from "@mdx-js/rollup";
+import remarkGfm from "remark-gfm";
+import remarkToc from "remark-toc";
 
 import million from "million/compiler";
 
@@ -11,7 +13,10 @@ export default defineConfig({
         million.vite({ auto: true }),
         {
             enforce: "pre",
-            ...mdx({}),
+            ...mdx({
+                providerImportSource: "@mdx-js/react",
+                remarkPlugins: [remarkGfm, [remarkToc, { maxDepth: 1 }]],
+            }),
         },
         react(),
     ],

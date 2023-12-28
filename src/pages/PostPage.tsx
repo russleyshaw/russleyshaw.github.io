@@ -1,52 +1,20 @@
 import { formatDistanceToNow } from "date-fns";
-import { motion, stagger } from "framer-motion";
+import { motion } from "framer-motion";
 import { observer } from "mobx-react";
-import React, { Suspense } from "react";
-import { Navigate, useParams } from "react-router-dom";
-import { getBlogEntry } from "./blog";
-import manifest from "./blog/manifest";
 import { APP_DISPLAY_NAME } from "../config";
-import { useTitle } from "../lib/hooks";
+import { useTitle } from "../lib/react";
 
+import Mdx from "../components/Mdx";
+import { blogRoute } from "../router";
 import styles from "./PostPage.module.css";
-import { CodeBlock } from "../components/CodeBlock";
-
-const components = {
-    pre: (props: any) => {
-        console.log("Pre", props);
-        if (props.children.type === "code") {
-            console.log("Code", props.children);
-            const language = props.children.props.className?.replace("language-", "");
-            return <CodeBlock code={props.children.props.children} language={language} />;
-        }
-
-        return <pre {...props} />;
-    },
-    img: (props: any) => {
-        console.log("Img", props);
-        return (
-            <div className={styles.contentImgContainer}>
-                <img {...props} />
-                {props.title && <span className={styles.caption}>{props.title}</span>}
-            </div>
-        );
-    },
-};
 
 export const PostPage = observer(() => {
-    const params = useParams();
-    const slug = params.slug;
-    if (!slug) {
-        return <Navigate to="/" />;
-    }
+    const loaderData = blogRoute.useLoaderData();
 
-    const meta = getBlogEntry(manifest, slug);
+    const { entry, component: Component } = loaderData;
 
-    useTitle(`${meta.title} | ${APP_DISPLAY_NAME}`);
+    useTitle(`${entry.title} | ${APP_DISPLAY_NAME}`);
 
-    const createdAt = formatDistanceToNow(new Date(meta.created), {
-        addSuffix: true,
-    });
     return (
         <motion.div
             className={styles.root}
@@ -67,18 +35,30 @@ export const PostPage = observer(() => {
             }}
         >
             <div className={styles.heading}>
-                <h1 className={styles.title}>{meta.title}</h1>
-                <span className={styles.description}>{meta.description}</span>
-                <span className={styles.date} title={meta.created}>
-                    {createdAt}
+                <h1 className={styles.title}>{entry.title}</h1>
+                <span className={styles.description}>{entry.description}</span>
+                <span className={styles.date} title={entry.created}>
+                    {getCreatedContents()}
                 </span>
             </div>
-
-            <div className={styles.content}>
-                <Suspense fallback="Loading...">
-                    <meta.component components={components} />
-                </Suspense>
-            </div>
+            <Mdx>
+                <Component />
+            </Mdx>
         </motion.div>
     );
+
+    function getCreatedContents() {
+        if (entry.updated) {
+            const updatedAt = formatDistanceToNow(new Date(entry.updated), {
+                addSuffix: true,
+            });
+            return `Updated ${updatedAt}`;
+        }
+
+        const createdAt = formatDistanceToNow(new Date(entry.created), {
+            addSuffix: true,
+        });
+
+        return `Created ${createdAt}`;
+    }
 });

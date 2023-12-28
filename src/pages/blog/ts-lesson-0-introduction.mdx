@@ -1,3 +1,9 @@
+import { Link } from "@tanstack/react-router";
+
+# Contents
+
+# How We Got Here
+
 Early internet pages were static, often utilizing PHP to populate pages with content and HTML Forms to submit content back to a server.
 The desire for more interactivity grew and so did JavaScript.
 
@@ -16,13 +22,11 @@ Using V8 as a foundation [Ryan Dahl created Node.js](https://www.youtube.com/wat
 As of 2023, JavaScript is heavily used in browsers and servers and provides an fast event-driven ecosystem to build atop.
 As single page applications (SPAs) grew in popularity, the desire to develop larger, safer JavaScript applications grew.
 
-# JavaScript
+# Why JavaScript At All?
 
 Before the question of TypeScript can be explored, we need to justify JavaScript.
 Sometimes the mention of JavaScript carries the baggage of the past.
 It has changed significantly over the years and has become more than just a scripting language.
-
-The benefits to JavaScript are:
 
 ## Ubiquity
 
@@ -41,7 +45,8 @@ One popular libraries, [React](https://react.dev/) is used by many frameworks an
 
 ## Performance
 
-JavaScript is faster than you might expect. Google has invested large amounts of money into making JavaScript fast through the development of V8.
+JavaScript is faster than you might expect.
+Google has invested large amounts of money into making JavaScript fast through the development of V8.
 New JS run-times are being built in Rust and Zig for increased performance.
 For example [Bun](https://bun.sh/) is a new runtime that claims to be up to several times faster than NodeJS.
 
@@ -60,7 +65,35 @@ This philosophy continues to this day and TypeScript strives for 100% compatibil
 
 ![A snippet of TypeScript code.](/images/ts-code-photo.webp "Interfaces are your friends :)")
 
-# Choosing TypeScript
+# Who Uses TypeScript?
+
+-   Google - [Angular](https://angular.io/), [Style Guide](https://google.github.io/styleguide/tsguide.html), [Neugierig](https://neugierig.org/software/blog/2018/09/typescript-at-google.html)
+-   Microsoft - they made it.
+-   AirBnB - [AirBnB Engineering](https://medium.com/airbnb-engineering/ts-migrate-a-tool-for-migrating-to-typescript-at-scale-cd23bfeb5cc)
+-   [freeCodeCamp](https://github.com/freeCodeCamp/freeCodeCamp)
+-   [Slack](https://slack.engineering/typescript-at-slack/)
+
+[![Slide from an AirBnB presentation](/images/airbnb-ts.webp "Airbnb think 38% of their bugs could have been preventable by using Typescript")](https://www.reddit.com/r/typescript/comments/c079bt/airbnb_think_38_of_their_bugs_could_have_been/)
+
+# Why Choose TypeScript?
+
+-   Shared code between front-end and back-end.
+
+## Developer Experience (DX)
+
+> From the developer's standpoint, \[DX\] describes how a person feels and perceives while symbolically interacting with a technological product.``
+
+## Isolation from JavaScript
+
+Which JavaScript are you targeting? ES2021?
+Which module system are you using? ESM? CommonJS? AMD?
+JavaScript, unfortunately is not a single thing, mostly due to the browser.
+We can control what version of NodeJS we have installed, but we can't control when Chrome updates.
+
+Targeting other module formats or assumed libs is a config change, rather than a code change.
+And since TypeScript itself is versioned to our `package.json` we always know exactly what version we're developing against.
+
+## Type Safety With Minimal Effort
 
 As mentioned earlier, the creation of TypeScript was fueled by the ever-growing complexity of web sites.
 No longer static pages, forms, or blogs, web sites began to deliver rich, interactive, data-driven experiences functioning closer to desktop applications than traditional sites.
@@ -186,6 +219,80 @@ Of course here, we lose the introspection ability of TypeScript on `OldLibrary`,
 Maybe in the future it is deemed important enough to write type definitions for `OldLibrary` and we can remove the `any` type.
 Often times this process of conversion of JavaScript to TypeScript results in finding bugs in our usage of it.
 
+# Concerns and FAQs
+
+## I really like duck-typing.
+
+"If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck."
+
+```python
+class Duck:
+    def swim(self):
+        print("Duck swimming")
+    def fly(self):
+        print("Duck flying")
+class Whale:
+    def swim(self):
+        print("Whale swimming")
+for animal in [Duck(), Whale()]:
+    animal.swim()
+    animal.fly()
+```
+
+```
+Duck swimming
+Duck flying
+Whale swimming
+AttributeError: 'Whale' object has no attribute 'fly'
+```
+
+This works in TypeScript. It even lets you know you'll get an error prior to running.
+
+```typescript
+class Duck {
+    swim() {
+        console.log("Duck swimming");
+    }
+    fly() {
+        console.log("Duck flying");
+    }
+}
+
+class Whale {
+    swim() {
+        console.log("Whale swimming");
+    }
+}
+
+for (const animal of [new Duck(), new Whale()]) {
+    animal.swim();
+    animal.fly(); // Whale has no attribute fly.
+}
+```
+
+```typescript
+const alice = {
+    name: "Alice",
+    age: 30,
+    job: "Developer",
+};
+
+const bob = {
+    name: "Bob",
+    age: 27,
+};
+
+const person = randChoice([alice, bob]);
+
+person.name; // Ok!
+person.age; // Ok!
+person.job; // Job does not exist on alice | bob;
+
+if (job in person) {
+    person.job; // Ok!
+}
+```
+
 # Getting Started
 
 In general, the workflow for any TypeScript project is to **write TypeScript code, compile it to JavaScript, and run the JavaScript**.
@@ -261,6 +368,77 @@ node main.js
 # Hello, world!
 ```
 
+# Ecosystem
+
+|     |                                             |
+| --- | ------------------------------------------- |
+| ⭐  | Favorite or preferred solution in category. |
+| 🚀  | Rising in popularity quickly.               |
+| 😅  | Good, but with limitations or disclaimers   |
+
+## Runtimes
+
+-   [NodeJS](https://nodejs.org/en) (Install [Volta](https://volta.sh/)) - The most popular JS runtime built off V8.
+-   🚀 [Bun](https://bun.sh/) - TS-first runtime.
+-   [tsx](https://github.com/privatenumber/tsx) - Run TS directly in Node.JS
+
+## Utilities
+
+-   ⭐ [lodash](https://lodash.com/) - collection of useful utilities for arrays, maps, collections, etc.
+-   ⭐ [date-fns](https://date-fns.org/) - Modern date library operating on native Date object.
+-   [immutable](https://immutable-js.com/) - Immutable collections for JS
+-   ⭐ [axios](https://axios-http.com/) - Promise based HTTP client for browser and Node
+-   [pino](https://github.com/pinojs/pino) - small, JSON logger
+
+## TypeScript Specific
+
+-   [OpenAPI TS](https://openapi-ts.pages.dev/) - Generate types & type-safe HTTP clients from OpenAPI schemas.
+
+## Data Validation
+
+-   ⭐ [Zod](https://zod.dev/) - Typescript-first schema validation
+-   [TypeBox](https://github.com/sinclairzx81/typebox) - Json Schema Type Builder for TypeScript
+
+## Database
+
+-   ⭐ [Drizzle ORM](https://orm.drizzle.team/) - TypeScript database schemas and migrations
+-   [Prisma](https://www.prisma.io/) - Cross-database schema format with migrations.
+
+## Linting & Formatting
+
+-   [ESLint](https://eslint.org/) - JavaScript static analysis
+-   [TypeScript ESLint](https://typescript-eslint.io/) - ESLint rules for TypeScript
+-   [Prettier](https://prettier.io/) - Automatic code formatter
+-   🚀 [Biome](https://biomejs.dev/) - All in one JS toolchain built in Rust
+
+## Web Frameworks
+
+-   [Fastify](https://fastify.dev/) - Fast HTTP web framework
+-   🚀 [ElysiaJS](https://elysiajs.com/) - Bun powered HTTP framework
+-   😅 [tRPC](https://trpc.io/) - End to end type-safe API and client
+-   [express](http://expressjs.com/) - The most popular JS web framework
+-   [NextJS](https://nextjs.org/) - Server-side rendered React framework
+
+## Frontend Frameworks
+
+-   ⭐ [React](https://react.dev/) - The most popular JS frontend framework
+-   [TanStack Query](https://tanstack.com/query/latest/) - Async data react hooks
+-   ⭐ [MobX](https://mobx.js.org/README.html) - Observable state management
+-   [Blueprint](https://blueprintjs.com/) - Data dense React components
+-   ⭐ [Vite](https://vitejs.dev/) - Web bundling solution
+
+## IDEs & Editors
+
+-   [VSCode](https://code.visualstudio.com/) - The most popular editor for TypeScript
+-   [Pretty TS Errors](https://marketplace.visualstudio.com/items?itemName=yoavbls.pretty-ts-errors)
+-
+
+# Resources
+
+-   [tsdocs.dev](https://tsdocs.dev/) - browse type documentation for NPM packages.
+-   [TS Playground](https://www.typescriptlang.org/play) - Online TypeScript playground & editor.
+-   [TS Cheatsheets](https://www.typescriptlang.org/cheatsheets) - Downloadable quick reference.
+
 ## More Reading
 
 -   [TypeScript](https://www.typescriptlang.org/)
@@ -268,3 +446,7 @@ node main.js
     -   [Playground](https://www.typescriptlang.org/play)
     -   [Cheatsheet - Very Useful!](https://www.typescriptlang.org/cheatsheets)
 -   [NodeJS](https://nodejs.org/en/)
+
+<Link to="/blog/$slug" params={{ slug: "ts-lesson-1-simple-types" }}>
+    Next Lesson
+</Link>

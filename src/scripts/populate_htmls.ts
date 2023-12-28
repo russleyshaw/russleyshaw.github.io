@@ -1,14 +1,14 @@
 import { mkdir } from "fs/promises";
 import path from "path";
 import { getBlogRoute } from "../pages/blog";
-import manifest from "../pages/blog/manifest";
+import { BLOG_MANIFEST } from "../pages/blog/manifest";
 
 async function main() {
     const baseIndexFile = "dist/index.html";
     const indexHtml = await Bun.file(baseIndexFile).text();
 
     const staticRoutes = ["/"];
-    const blogRoutes = manifest.blogs.map(blog => getBlogRoute(blog.slug));
+    const blogRoutes = BLOG_MANIFEST.blogs.map((blog) => getBlogRoute(blog.slug));
 
     const realRoutes = [...staticRoutes, ...blogRoutes];
 
@@ -26,7 +26,7 @@ main()
     .then(() => {
         process.exit(0);
     })
-    .catch(err => {
+    .catch((err) => {
         console.error(err);
         process.exit(1);
     });
