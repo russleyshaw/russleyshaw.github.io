@@ -16,14 +16,11 @@ It is best practice to use `const` by default, as it will prevent unintended rea
 
 ## Var
 
-It is best practice to avoid the `var` keyword. You may see it used in other JavaScript code, but it is not recommended as it has some unintuitive behavior.
+[Don't use it.](https://developer.mozilla.org/en-US/docs/MDN/Writing_guidelines/Writing_style_guide/Code_style_guide/JavaScript#variable_declarations)
 
 # Types
 
-TypeScript has several different primitive types that can be used.
-These types are used to represent the most basic types of data.
-They are not references to objects, but the actual values themselves.
-Because of this, when declared as `const` they cannot be mutated.
+The main, base type in TypeScript that can be used are:
 
 | Type        | Description                                                  | Examples                        |
 | ----------- | ------------------------------------------------------------ | ------------------------------- |
@@ -92,7 +89,7 @@ const currentPort = defaultPort ?? port;
 console.log(currentPort); // 3000
 ```
 
-## Object Types
+## Complex Types
 
 An object type is a type that is composed of multiple primitive types.
 
@@ -123,8 +120,6 @@ foo = [1, 2, 3];
 ```
 
 ### Functions
-
-# Functions
 
 Functions are the most common way to encapsulate logic in JavaScript.
 They are blocks of code that can be called multiple times with different inputs.

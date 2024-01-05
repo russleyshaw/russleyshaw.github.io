@@ -14,7 +14,7 @@ export const TS_LESSONS = [
     {
         title: "TS 1: Basic Types",
         description: "Learn the basic types in TypeScript",
-        created: "2023-12-22",
+        created: "2024-1-4",
         tags: ["typescript", "lesson"],
         author: "Russley Shaw",
         component: importMdx(() => import("./ts-lesson-1-simple-types.mdx")),
@@ -25,15 +25,15 @@ export const TS_LESSONS = [
 export const BLOG_MANIFEST = {
     blogs: [
         ...TS_LESSONS,
-        {
-            title: "Diagrams as Code",
-            description: "Using Mermaid to create diagrams in Markdown",
-            created: "2023-12-27",
-            tags: ["typescript", "mermaid"],
-            author: "Russley Shaw",
-            component: importMdx(() => import("./2023-12-27-diagrams-as-code.mdx")),
-            slug: "diagrams-as-code",
-        },
+        // {
+        //     title: "Diagrams as Code",
+        //     description: "Using Mermaid to create diagrams in Markdown",
+        //     created: "2023-12-27",
+        //     tags: ["typescript", "mermaid"],
+        //     author: "Russley Shaw",
+        //     component: importMdx(() => import("./2023-12-27-diagrams-as-code.mdx")),
+        //     slug: "diagrams-as-code",
+        // },
         // {
         //     title: "CSS Layouts",
         //     description: "Flex, Grid, Floats, and more",
