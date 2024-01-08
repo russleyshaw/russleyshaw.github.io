@@ -3,7 +3,7 @@ import type { MDXComponents } from "mdx/types";
 
 import { ReactNode, Suspense, lazy } from "react";
 
-import styles from "./Mdx.module.css";
+import style from "./MdxContent.module.css";
 
 const Mermaid = lazy(() => import("./Mermaid"));
 const CodeBlock = lazy(() => import("./CodeBlock"));
@@ -35,17 +35,17 @@ const components: MDXComponents = {
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     img: (props: any) => {
         return (
-            <div className={styles.imgContainer}>
+            <div>
                 {/* biome-ignore lint/a11y/useAltText: <explanation> */}
                 <img {...props} />
-                {props.title && <span className={styles.caption}>{props.title}</span>}
+                {props.title && <span>{props.title}</span>}
             </div>
         );
     },
 };
 export default (props: { children: ReactNode }) => {
     return (
-        <div className={styles.mdxContent}>
+        <div className={style.mdxContent}>
             <MDXProvider components={components}>{props.children}</MDXProvider>
         </div>
     );

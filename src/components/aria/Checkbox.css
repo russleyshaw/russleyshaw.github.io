@@ -1,11 +1,11 @@
 :root {
-    --border-color: var(--color-text);
-    --border-color-pressed: var(--color-primary);
+    --border-color: theme(colors.platinum.DEFAULT);
+    --border-color-pressed: theme(colors.fuchsia-blue.500);
     --focus-ring-color: var(--color-primary);
     --text-color: var(--color-text);
     --highlight-background: var(--color-primary-light);
     --highlight-background-pressed: var(--color-primary-dark);
-    --highlight-foreground: var(--color-primary-text);
+    --highlight-foreground: theme(colors.orchid.500);
 }
 
 .react-aria-Checkbox {
@@ -15,15 +15,14 @@
 
     display: flex;
     align-items: center;
-    gap: 0.571rem;
-    font-size: 1.143rem;
+    gap: 0.5rem;
     color: var(--text-color);
     forced-color-adjust: none;
 
     .checkbox {
         width: 1.143rem;
         height: 1.143rem;
-        border: 2px solid var(--border-color);
+        border: 1px solid var(--border-color);
         border-radius: 4px;
         transition: all 200ms;
         display: flex;

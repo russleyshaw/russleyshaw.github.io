@@ -1,9 +1,66 @@
-@layer reset, base, tokens, recipes, utilities;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@import "./variables.css";
-@import "./global.css";
+html,
+body,
+#root {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
 
-@import "./badge.css";
-@import "./button.css";
-@import "./typography.css";
-@import "./highlight.css";
+@layer base {
+    h1 {
+        @apply text-4xl;
+    }
+
+    h2 {
+        @apply text-3xl;
+    }
+
+    h3 {
+        @apply text-2xl;
+    }
+
+    h4 {
+        @apply text-xl;
+    }
+
+    h5 {
+        @apply text-lg;
+    }
+
+    ul {
+        @apply list-disc;
+    }
+
+    a {
+        @apply text-fuchsia-blue-500;
+
+        &:hover {
+            @apply text-fuchsia-blue-300;
+        }
+    }
+
+    :not(pre) > code {
+        @apply bg-slate-800 text-orchid-300 rounded  text-sm;
+    }
+}
+
+@layer utilities {
+    .grouped {
+        * > * {
+            @apply border-gray-200 border;
+        }
+
+        :last-child {
+            @apply rounded-l-none;
+        }
+
+        :first-child {
+            @apply rounded-r-none;
+        }
+    }
+}

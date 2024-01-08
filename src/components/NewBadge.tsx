@@ -1,7 +1,5 @@
 import { motion } from "framer-motion";
 
-import styles from "./NewBadge.module.css";
-
 export interface NewBadgeProps {
     wiggle?: boolean;
 }
@@ -25,7 +23,7 @@ export default function NewBadge(props: NewBadgeProps) {
                 ease: "easeInOut",
                 loop: Infinity,
             }}
-            className={styles.newBadge}
+            className="text-white bg-red-500 rounded px-2 py-1"
         >
             New!
         </motion.div>

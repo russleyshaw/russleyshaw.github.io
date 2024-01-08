@@ -1,5 +1,4 @@
 import { useState } from "react";
-import styles from "./H1.module.css";
 import { Variants, motion } from "framer-motion";
 import { observer } from "mobx-react";
 
@@ -20,17 +19,12 @@ export const H1 = observer((props: H1Props) => {
     const link = `#${anchor}`;
 
     return (
-        <h1
-            className={styles.header}
-            onMouseEnter={() => setHovered(true)}
-            onMouseLeave={() => setHovered(false)}
-        >
+        <h1 onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
             <motion.a
                 initial={"hidden"}
                 animate={hovered ? "hovered" : "hidden"}
                 id={anchor}
                 href={link}
-                className={styles.headingAnchor}
             >
                 #
             </motion.a>

@@ -1,9 +1,7 @@
 import { observer } from "mobx-react";
 import { useState } from "react";
 
-import Button from "./aria/Button";
-
-import styles from "./MultipleChoiceQuiz.module.css";
+import { Button } from "./aria/Button";
 
 import { FaCircleCheck, FaCircleQuestion, FaCircleXmark } from "react-icons/fa6";
 import { TwoslashError, twoslasher } from "@typescript/twoslash";
@@ -36,7 +34,7 @@ export const FillBlankQuiz = observer((props: FillBlankQuizProps) => {
     const filled = props.code.replace("BLANK", value || "____");
 
     const onSubmit = () => {
-        isTypeScriptValid(filled).then((results) => {
+        isTypeScriptValid(filled).then(results => {
             if (results.valid) {
                 setError("");
                 setSuccess(true);
@@ -56,20 +54,22 @@ export const FillBlankQuiz = observer((props: FillBlankQuizProps) => {
     );
 
     return (
-        <div className={styles.root}>
-            <div data-status={status} className={styles.heading}>
+        <div className="bg-raisin flex flex-col p-4">
+            <div
+                className="data-[status=success]:text-green-500 data-[status=error]:text-red-500 flex flex-row items-center gap-2 text-2xl"
+                data-status={status}
+            >
                 {headerIcon}
                 <span>{title}</span>
             </div>
-            <div className={styles.content}>{children}</div>
+            <div>{children}</div>
 
             <CodeBlock actions={false} code={filled} />
 
-            <TextField label="Answer" value={value} onChange={(v) => setValue(v)} />
+            <TextField label="Answer" value={value} onChange={v => setValue(v)} />
 
-            {error && <div className={styles.hint}>Reason: {error}</div>}
-            {success && !explanation && <div className={styles.hint}>Success</div>}
-            {success && explanation && <div className={styles.hint}>Reason: {explanation}</div>}
+            {error && <div>Reason: {error}</div>}
+            {success && explanation && <div>Reason: {explanation}</div>}
 
             <div>
                 <Button isDisabled={!value} onPress={onSubmit}>

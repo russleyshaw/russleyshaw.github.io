@@ -1,23 +1,17 @@
 import { observer } from "mobx-react";
-
 import { APP_DISPLAY_NAME } from "../config";
-import { ThemeSelect } from "./ThemeSelect";
-
-import styles from "./Navbar.module.css";
 import { Link } from "@tanstack/react-router";
 
 export const Navbar = observer(() => {
     return (
-        <div className={styles.root}>
+        <div className="flex flex-row items-end justify-between">
             <div>
-                <Link className={styles.siteTitle} to="/">
+                <Link to="/" className="text-center text-3xl font-bold text-purple underline">
                     {APP_DISPLAY_NAME}
                 </Link>
             </div>
 
-            <div>
-                <ThemeSelect />
-            </div>
+            <div></div>
         </div>
     );
 });

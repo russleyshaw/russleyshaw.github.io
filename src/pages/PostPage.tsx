@@ -4,9 +4,8 @@ import { observer } from "mobx-react";
 import { APP_DISPLAY_NAME } from "../config";
 import { useTitle } from "../lib/react";
 
-import Mdx from "../components/Mdx";
+import MdxContent from "../components/MdxContent";
 import { blogRoute } from "../router";
-import styles from "./PostPage.module.css";
 
 export const PostPage = observer(() => {
     const loaderData = blogRoute.useLoaderData();
@@ -17,7 +16,6 @@ export const PostPage = observer(() => {
 
     return (
         <motion.div
-            className={styles.root}
             initial={{
                 opacity: 0,
                 y: 20,
@@ -34,16 +32,14 @@ export const PostPage = observer(() => {
                 duration: 0.5,
             }}
         >
-            <div className={styles.heading}>
-                <h1 className={styles.title}>{entry.title}</h1>
-                <span className={styles.description}>{entry.description}</span>
-                <span className={styles.date} title={entry.created}>
-                    {getCreatedContents()}
-                </span>
+            <div className="">
+                <h1 className="">{entry.title}</h1>
+                <span>{entry.description}</span>
+                <span title={entry.created}>{getCreatedContents()}</span>
             </div>
-            <Mdx>
+            <MdxContent>
                 <Component />
-            </Mdx>
+            </MdxContent>
         </motion.div>
     );
 

@@ -1,3 +1,6 @@
 {
-    "cSpell.words": ["tanstack"]
+    "cSpell.words": ["tanstack"],
+    "files.associations": {
+        "*.css": "tailwindcss"
+    }
 }

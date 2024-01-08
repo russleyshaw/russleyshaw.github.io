@@ -9,33 +9,31 @@ import { useTitle } from "../lib/react";
 import { parseCreatedDate } from "./blog";
 
 import { useNavigate } from "@tanstack/react-router";
-import styles from "./HomePage.module.css";
 import { BLOG_MANIFEST } from "./blog/manifest";
+import { Tag } from "../components/aria/Tag";
 
 export const HomePage = observer(() => {
     useTitle(`Home | ${APP_DISPLAY_NAME}`);
 
-    const blogs = sortBy(BLOG_MANIFEST.blogs, (b) => {
+    const blogs = sortBy(BLOG_MANIFEST.blogs, b => {
         if (b.updated) return parseCreatedDate(b.updated);
 
         return parseCreatedDate(b.created);
     }).reverse();
 
     return (
-        <div className={styles.root}>
-            <div className={styles.posts}>
-                {blogs.map((meta) => (
-                    <PostEntry
-                        created={meta.created}
-                        updated={meta.updated}
-                        description={meta.description}
-                        slug={meta.slug}
-                        tags={meta.tags}
-                        title={meta.title}
-                        key={meta.slug}
-                    />
-                ))}
-            </div>
+        <div className="flex flex-col gap-4">
+            {blogs.map(meta => (
+                <PostEntry
+                    created={meta.created}
+                    updated={meta.updated}
+                    description={meta.description}
+                    slug={meta.slug}
+                    tags={meta.tags}
+                    title={meta.title}
+                    key={meta.slug}
+                />
+            ))}
         </div>
     );
 });
@@ -68,7 +66,7 @@ const PostEntry = observer((props: PostEntryProps) => {
 
     return (
         <motion.div
-            className={styles.postEntry}
+            className="bg-black/50 hover:border-fuchsia-blue-500 border-black/0 relative grid cursor-pointer grid-cols-2 gap-4 rounded-2xl border-2 border-solid p-4"
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
             onClick={onClick}
@@ -85,20 +83,18 @@ const PostEntry = observer((props: PostEntryProps) => {
                 x: 20,
             }}
         >
-            <div className={styles.newBadge}>
+            <div className="absolute -right-4 -top-4 rotate-12">
                 <AnimatePresence>{isNew && <NewBadge wiggle={hovered} />}</AnimatePresence>
             </div>
 
-            <h3 className={styles.title}>{title}</h3>
-            <div className={styles.description}>{description}</div>
-            <div className={styles.tags}>
-                {tags.map((t) => (
-                    <div key={t} className="badge">
-                        {t}
-                    </div>
+            <h3>{title}</h3>
+            <div className="flex flex-row justify-end gap-2">
+                {tags.map(t => (
+                    <Tag key={t}>{t}</Tag>
                 ))}
             </div>
-            <div className={styles.postDate}>{getDateContents()}</div>
+            <div className="text-sm opacity-50">{description}</div>
+            <div className="align-end place-self-end text-sm">{getDateContents()}</div>
         </motion.div>
     );
 

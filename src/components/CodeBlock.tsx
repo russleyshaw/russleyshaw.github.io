@@ -8,8 +8,8 @@ import { useCallback, useMemo, useState } from "react";
 import { trimLines } from "../lib/string";
 
 import { AnimatePresence, motion } from "framer-motion";
-
-import styles from "./CodeBlock.module.css";
+import { Button } from "./aria/Button";
+import { ButtonGroup } from "./aria/ButtonGroup";
 
 export interface CodeBlockProps {
     filename?: string;
@@ -44,7 +44,7 @@ export default observer((props: CodeBlockProps) => {
 
     return (
         <div
-            className={styles.root}
+            className="relative rounded bg-jet p-4"
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
         >
@@ -52,37 +52,36 @@ export default observer((props: CodeBlockProps) => {
                 <AnimatePresence>
                     {hovered && (
                         <motion.div
-                            className={styles.actions}
                             initial={{
-                                right: -100,
                                 opacity: 0,
                             }}
                             animate={{
-                                right: 0,
                                 opacity: 1,
                             }}
                             transition={{
                                 duration: 0.5,
                             }}
                             exit={{
-                                right: -100,
                                 opacity: 0,
                             }}
+                            className="absolute right-2 top-2 flex-col p-2 text-xs"
                         >
-                            <button type="button" className="button" onClick={onCopyClick}>
-                                {copied ? "Copied!" : "Copy"}
-                            </button>
-                            {showOpenInPlayground && (
-                                <button type="button" className="button">
-                                    TS Playground
-                                </button>
-                            )}
+                            <ButtonGroup>
+                                <Button type="button" className="button" onPress={onCopyClick}>
+                                    {copied ? "Copied!" : "Copy"}
+                                </Button>
+                                {showOpenInPlayground && (
+                                    <Button type="button" className="button">
+                                        TS Playground
+                                    </Button>
+                                )}
+                            </ButtonGroup>
                         </motion.div>
                     )}
                 </AnimatePresence>
             )}
 
-            <pre>
+            <pre className="overflow-x-auto">
                 {/* biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation> */}
                 <code dangerouslySetInnerHTML={{ __html: highlighted.value }} />
             </pre>

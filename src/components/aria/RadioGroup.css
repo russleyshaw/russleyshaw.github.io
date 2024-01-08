@@ -1,10 +1,10 @@
 :root {
     --border-color: var(--color-text);
-    --border-color-pressed: var(--color-primary);
-    --focus-ring-color: var(--color-primary);
-    --highlight-background: var(--color-primary-light);
-    --highlight-background-pressed: var(--color-primary-dark);
-    --highlight-foreground: var(--color-primary-text);
+    --border-color-pressed: theme(colors.fuchsia-blue.500);
+    --focus-ring-color: theme(colors.fuchsia-blue.500);
+    --highlight-background: theme(colors.fuchsia-blue.500);
+    --highlight-background-pressed: theme(colors.fuchsia-blue.500);
+    --highlight-foreground: theme(colors.fuchsia-blue.500);
 }
 
 .react-aria-RadioGroup {
@@ -17,10 +17,7 @@
 .react-aria-Radio {
     display: flex;
     align-items: center;
-    gap: 0.571rem;
-    font-size: 1.143rem;
-    color: var(--text-color);
-    forced-color-adjust: none;
+    gap: 0.25rem;
 
     &:before {
         content: "";
@@ -32,6 +29,8 @@
         background: var(--field-background);
         border-radius: 1.286rem;
         transition: all 200ms;
+
+        color: theme(colors.fuchsia-blue.500);
     }
 
     &[data-pressed]:before {

@@ -1,14 +1,13 @@
 import { observer } from "mobx-react";
 import { useState } from "react";
 
-import Button from "./aria/Button";
+import { Button } from "./aria/Button";
 import RadioGroup from "./aria/RadioGroup";
 import Radio from "./aria/Radio";
 import CheckboxGroup from "./aria/CheckboxGroup";
 import Checkbox from "./aria/Checkbox";
 
-import { getFirst, mapEntries, toggleSet } from "../lib/common";
-import styles from "./MultipleChoiceQuiz.module.css";
+import { getFirst, mapEntries } from "../lib/common";
 
 import { FaCircleCheck, FaCircleQuestion, FaCircleXmark } from "react-icons/fa6";
 
@@ -56,7 +55,7 @@ export const MultipleChoiceQuiz = observer(
                     setSuccess(false);
                 }
             } else {
-                if (props.answer.every((a) => values.has(a))) {
+                if (props.answer.every(a => values.has(a))) {
                     setError("");
                     setSuccess(true);
                 } else {
@@ -77,15 +76,18 @@ export const MultipleChoiceQuiz = observer(
         );
 
         return (
-            <div className={styles.root}>
-                <div data-status={status} className={styles.heading}>
+            <div className="bg-raisin flex flex-col p-4">
+                <div
+                    className="data-[status=success]:text-green-500 data-[status=error]:text-red-500 flex flex-row items-center gap-2 text-2xl"
+                    data-status={status}
+                >
                     {headerIcon}
                     <span>{myTitle}</span>
                 </div>
-                <div className={styles.content}>{children}</div>
+                <div>{children}</div>
 
                 {props.type === "single" && (
-                    <RadioGroup onChange={(v) => setValues(new Set([v as T]))}>
+                    <RadioGroup onChange={v => setValues(new Set([v as T]))}>
                         {mapEntries(props.choices, (key, value) => (
                             <Radio key={key} value={key}>
                                 {value}
@@ -95,7 +97,7 @@ export const MultipleChoiceQuiz = observer(
                 )}
 
                 {props.type === "multiple" && (
-                    <CheckboxGroup onChange={(v) => setValues(new Set(v as T[]))}>
+                    <CheckboxGroup onChange={v => setValues(new Set(v as T[]))}>
                         {mapEntries(props.choices, (key, value) => (
                             <Checkbox key={key} value={key}>
                                 {value}
@@ -104,11 +106,10 @@ export const MultipleChoiceQuiz = observer(
                     </CheckboxGroup>
                 )}
 
-                {error && hint && <div className={styles.hint}>Hint: {hint}</div>}
-                {success && !explanation && <div className={styles.hint}>Success</div>}
-                {success && explanation && <div className={styles.hint}>Reason: {explanation}</div>}
+                {error && hint && <div>Hint: {hint}</div>}
+                {success && explanation && <div>Reason: {explanation}</div>}
 
-                <div>
+                <div className="mt-2">
                     <Button isDisabled={values.size === 0} onPress={onSubmit}>
                         Submit
                     </Button>
