@@ -26,6 +26,15 @@ export const BLOG_MANIFEST = {
     blogs: [
         ...TS_LESSONS,
         // {
+        //     title: "Japanese",
+        //     description: "Japanese Kana Interpretation",
+        //     created: "2024-1-17",
+        //     tags: ["typescript", "japanese"],
+        //     author: "Russley Shaw",
+        //     component: importMdx(() => import("./2024-1-17-japanese-romaji.mdx")),
+        //     slug: "japanese-romaji",
+        // },
+        // {
         //     title: "Diagrams as Code",
         //     description: "Using Mermaid to create diagrams in Markdown",
         //     created: "2023-12-27",

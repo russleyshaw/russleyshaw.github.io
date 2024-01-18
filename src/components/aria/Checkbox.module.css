@@ -1,0 +1,53 @@
+.input {
+    --active-bg-color: theme(colors.fuchsia-blue.600);
+    --active-border-color: theme(colors.fuchsia-blue.700);
+
+    --pressed-bg-color: theme(colors.fuchsia-blue.700);
+    --pressed-border-color: theme(colors.fuchsia-blue.800);
+
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .checkbox {
+        width: 1.143rem;
+        height: 1.143rem;
+        border: 2px solid var(--text-color);
+        border-radius: 4px;
+        transition: all 200ms;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    svg {
+        width: 1rem;
+        height: 1rem;
+        fill: none;
+        stroke: var(--text-color);
+        stroke-width: 3px;
+        stroke-dasharray: 22px;
+        stroke-dashoffset: 66;
+        transition: all 200ms;
+    }
+
+    &[data-pressed] .checkbox {
+        border-color: var(--pressed-border-color);
+    }
+
+    &[data-selected] {
+        .checkbox {
+            border-color: var(--active-border-color);
+            background: var(--active-bg-color);
+        }
+
+        &[data-pressed] .checkbox {
+            border-color: var(--pressed-border-color);
+            background: var(--pressed-bg-color);
+        }
+
+        svg {
+            stroke-dashoffset: 44;
+        }
+    }
+}
