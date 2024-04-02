@@ -2,12 +2,10 @@ import { observer } from "mobx-react";
 import { useState } from "react";
 
 import { Button } from "./aria/Button";
-import RadioGroup from "./aria/RadioGroup";
-import Radio from "./aria/Radio";
-import CheckboxGroup from "./aria/CheckboxGroup";
-import Checkbox from "./aria/Checkbox";
+import { RadioGroup } from "./aria/RadioGroup";
+import { CheckboxGroup, CheckboxOption } from "./aria/CheckboxGroup";
 
-import { getFirst, mapEntries } from "../lib/common";
+import { getFirst } from "../lib/common";
 
 import { FaCircleCheck, FaCircleQuestion, FaCircleXmark } from "react-icons/fa6";
 
@@ -16,7 +14,7 @@ interface BaseProps<T_AnswerKey extends string> {
     hint?: string;
     explanation?: string;
 
-    choices: Record<T_AnswerKey, string>;
+    choices: CheckboxOption<T_AnswerKey>[];
 
     children?: React.ReactNode;
 }
@@ -76,9 +74,9 @@ export const MultipleChoiceQuiz = observer(
         );
 
         return (
-            <div className="bg-raisin flex flex-col p-4">
+            <div className="flex flex-col bg-raisin p-4">
                 <div
-                    className="data-[status=success]:text-green-500 data-[status=error]:text-red-500 flex flex-row items-center gap-2 text-2xl"
+                    className="flex flex-row items-center gap-2 text-2xl data-[status=error]:text-red-500 data-[status=success]:text-green-500"
                     data-status={status}
                 >
                     {headerIcon}
@@ -87,23 +85,19 @@ export const MultipleChoiceQuiz = observer(
                 <div>{children}</div>
 
                 {props.type === "single" && (
-                    <RadioGroup onChange={v => setValues(new Set([v as T]))}>
-                        {mapEntries(props.choices, (key, value) => (
-                            <Radio key={key} value={key}>
-                                {value}
-                            </Radio>
-                        ))}
-                    </RadioGroup>
+                    <RadioGroup<T>
+                        value={[...values][0]}
+                        choices={choices}
+                        onChange={v => setValues(new Set([v as T]))}
+                    />
                 )}
 
                 {props.type === "multiple" && (
-                    <CheckboxGroup onChange={v => setValues(new Set(v as T[]))}>
-                        {mapEntries(props.choices, (key, value) => (
-                            <Checkbox key={key} value={key}>
-                                {value}
-                            </Checkbox>
-                        ))}
-                    </CheckboxGroup>
+                    <CheckboxGroup<T>
+                        values={[...values]}
+                        onChange={v => setValues(new Set(v as T[]))}
+                        choices={choices}
+                    />
                 )}
 
                 {error && hint && <div>Hint: {hint}</div>}

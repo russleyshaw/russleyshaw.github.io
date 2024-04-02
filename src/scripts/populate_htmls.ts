@@ -2,6 +2,7 @@ import { mkdir } from "fs/promises";
 import path from "path";
 import { getBlogRoute } from "../pages/blog";
 import { BLOG_MANIFEST } from "../pages/blog/manifest";
+import { $ } from "bun";
 
 async function main() {
     const baseIndexFile = "dist/index.html";

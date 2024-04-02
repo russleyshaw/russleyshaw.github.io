@@ -6,6 +6,7 @@ import { useTitle } from "../lib/react";
 
 import MdxContent from "../components/MdxContent";
 import { blogRoute } from "../router";
+import { Tag } from "../components/aria/Tag";
 
 export const PostPage = observer(() => {
     const loaderData = blogRoute.useLoaderData();
@@ -32,11 +33,21 @@ export const PostPage = observer(() => {
                 duration: 0.5,
             }}
         >
-            <div className="">
+            <div className="mb-4 grid grid-cols-2 gap-4">
                 <h1 className="">{entry.title}</h1>
-                <span>{entry.description}</span>
-                <span title={entry.created}>{getCreatedContents()}</span>
+
+                <span title={entry.created} className="justify-self-end">
+                    {getCreatedContents()}
+                </span>
+
+                <span className="text-sm">{entry.description}</span>
+                <div className="flex flex-row flex-wrap justify-self-end gap-2">
+                    {entry.tags.map((tag) => (
+                        <Tag key={tag}>{tag}</Tag>
+                    ))}
+                </div>
             </div>
+            <hr />
             <MdxContent>
                 <Component />
             </MdxContent>

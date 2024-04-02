@@ -1,4 +1,4 @@
-import { parse } from "date-fns";
+import { format, parse } from "date-fns";
 
 export type MdxImport = typeof import("*.mdx");
 
@@ -14,6 +14,7 @@ export interface BlogManifestEntry {
     tags: string[];
     author: string;
     slug: string;
+    draft?: boolean;
 
     component: ReturnType<typeof importMdx>;
 }
@@ -28,6 +29,10 @@ export function getBlogRoute(slug: string) {
 
 export function parseCreatedDate(created: string) {
     return parse(created, "yyyy-MM-dd", new Date(0));
+}
+
+export function toCreatedDate(created: Date) {
+    return format(created, "yyyy-MM-dd");
 }
 
 export function getBlogEntry(manifest: BlogManifest, slug: string) {

@@ -51,7 +51,7 @@ export default observer((props: MermaidProps) => {
                     }}
                     className="absolute bottom-0 right-0 text-xs"
                 >
-                    <Button onPress={() => setIsExpanded(v => !v)}>
+                    <Button onPress={() => setIsExpanded((v) => !v)}>
                         {isExpanded ? "Collapse" : "Expand"}
                     </Button>
                 </motion.div>

@@ -4,9 +4,11 @@ import colors from "tailwindcss/colors";
 
 export default {
     content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-
+    darkMode: "class",
     theme: {
         colors: {
+            ...colors,
+
             platinum: {
                 DEFAULT: "#DFE1E2",
             },
@@ -59,24 +61,12 @@ export default {
                 900: "#5b4133",
                 950: "#30211a",
             },
-
-            red: colors.red,
-            white: colors.white,
-            black: colors.black,
-            gray: colors.gray,
-            slate: colors.slate,
-            blue: colors.blue,
-            green: colors.green,
-            yellow: colors.yellow,
-
-            background: {
-                DEFAULT: "{colors.platinum}",
-                dark: "{colors.raisin}",
-            },
         },
 
-        fontFamily: {
-            sans: ["Inter", "sans-serif"],
+        extends: {
+            fontFamily: {
+                sans: ["Inter", "sans-serif"],
+            },
         },
     },
 };

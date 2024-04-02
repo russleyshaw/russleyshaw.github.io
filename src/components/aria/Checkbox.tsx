@@ -1,27 +1,34 @@
-import {
-    Checkbox as AriaCheckbox,
-    CheckboxProps as AriaCheckboxProps,
-} from "react-aria-components";
+import { Checkbox as AriaCheckbox } from "react-aria-components";
 
-import "./Checkbox.css";
+import style from "./Checkbox.module.css";
+import { observer } from "mobx-react";
 
-export default function Checkbox({ children, ...props }: AriaCheckboxProps) {
+export interface CheckboxProps {
+    children?: React.ReactNode;
+    disabled?: boolean;
+    checked?: boolean;
+    value?: string;
+    onChange?: (checked: boolean) => void;
+}
+
+export const Checkbox = observer((props: CheckboxProps) => {
+    const { children, disabled, checked, onChange, value } = props;
     return (
-        <AriaCheckbox {...props}>
-            {({ isIndeterminate }) => (
-                <>
-                    <div className="checkbox">
-                        <svg viewBox="0 0 18 18" aria-hidden="true">
-                            {isIndeterminate ? (
-                                <rect x={1} y={7.5} width={15} height={3} />
-                            ) : (
-                                <polyline points="1 9 7 14 15 4" />
-                            )}
-                        </svg>
-                    </div>
-                    {children}
-                </>
-            )}
+        <AriaCheckbox
+            isDisabled={disabled}
+            value={value}
+            isSelected={checked}
+            onChange={v => onChange?.(v)}
+            className={style.input}
+        >
+            <>
+                <div className={style.checkbox}>
+                    <svg viewBox="0 0 18 18" aria-hidden="true">
+                        <polyline points="1 9 7 14 15 4" />
+                    </svg>
+                </div>
+                {children}
+            </>
         </AriaCheckbox>
     );
-}
+});

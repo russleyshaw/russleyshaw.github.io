@@ -15,7 +15,7 @@ import { Tag } from "../components/aria/Tag";
 export const HomePage = observer(() => {
     useTitle(`Home | ${APP_DISPLAY_NAME}`);
 
-    const blogs = sortBy(BLOG_MANIFEST.blogs, b => {
+    const blogs = sortBy(BLOG_MANIFEST.blogs, (b) => {
         if (b.updated) return parseCreatedDate(b.updated);
 
         return parseCreatedDate(b.created);
@@ -23,7 +23,7 @@ export const HomePage = observer(() => {
 
     return (
         <div className="flex flex-col gap-4">
-            {blogs.map(meta => (
+            {blogs.map((meta) => (
                 <PostEntry
                     created={meta.created}
                     updated={meta.updated}
@@ -88,8 +88,8 @@ const PostEntry = observer((props: PostEntryProps) => {
             </div>
 
             <h3>{title}</h3>
-            <div className="flex flex-row justify-end gap-2">
-                {tags.map(t => (
+            <div className="flex flex-row flex-wrap justify-end gap-2 content-start">
+                {tags.map((t) => (
                     <Tag key={t}>{t}</Tag>
                 ))}
             </div>

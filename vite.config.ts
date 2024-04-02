@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import mdx from "@mdx-js/rollup";
 import remarkGfm from "remark-gfm";
 import remarkToc from "remark-toc";
+import { visualizer } from "rollup-plugin-visualizer";
 
 import million from "million/compiler";
 
@@ -19,5 +20,6 @@ export default defineConfig({
             }),
         },
         react(),
+        visualizer(),
     ],
 });

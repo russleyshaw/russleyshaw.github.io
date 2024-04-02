@@ -11,6 +11,16 @@ body,
     height: 100%;
 }
 
+:root {
+    --background-color: theme(colors.platinum.DEFAULT);
+    --text-color: theme(colors.jet.DEFAULT);
+}
+
+[data-theme="dark"] {
+    --background-color: theme(colors.jet.DEFAULT);
+    --text-color: theme(colors.platinum.DEFAULT);
+}
+
 @layer base {
     h1 {
         @apply text-4xl;

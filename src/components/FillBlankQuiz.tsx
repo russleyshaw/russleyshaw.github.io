@@ -4,13 +4,9 @@ import { useState } from "react";
 import { Button } from "./aria/Button";
 
 import { FaCircleCheck, FaCircleQuestion, FaCircleXmark } from "react-icons/fa6";
-import { TwoslashError, twoslasher } from "@typescript/twoslash";
 import CodeBlock from "./CodeBlock";
 import TextField from "./aria/TextField";
-
-import ts from "typescript";
-import * as tsvfs from "@typescript/vfs";
-import lzstring from "lz-string";
+import { TwoslashError } from "@typescript/twoslash";
 
 interface FillBlankQuizProps {
     title: string;
@@ -34,7 +30,7 @@ export const FillBlankQuiz = observer((props: FillBlankQuizProps) => {
     const filled = props.code.replace("BLANK", value || "____");
 
     const onSubmit = () => {
-        isTypeScriptValid(filled).then(results => {
+        isTypeScriptValid(filled).then((results) => {
             if (results.valid) {
                 setError("");
                 setSuccess(true);
@@ -66,7 +62,7 @@ export const FillBlankQuiz = observer((props: FillBlankQuizProps) => {
 
             <CodeBlock actions={false} code={filled} />
 
-            <TextField label="Answer" value={value} onChange={v => setValue(v)} />
+            <TextField label="Answer" value={value} onChange={(v) => setValue(v)} />
 
             {error && <div>Reason: {error}</div>}
             {success && explanation && <div>Reason: {explanation}</div>}
@@ -81,10 +77,15 @@ export const FillBlankQuiz = observer((props: FillBlankQuizProps) => {
 });
 
 async function isTypeScriptValid(code: string) {
+    const tsvfs = await import("@typescript/vfs");
+    const ts = await import("typescript");
+    const lzstring = await import("lz-string");
+    const twoslasher = await import("@typescript/twoslash");
+
     const fsMap = await tsvfs.createDefaultMapFromCDN({ target: 3 }, "3.7.3", true, ts);
 
     try {
-        const results = twoslasher(code, "ts", {
+        const results = twoslasher.twoslasher(code, "ts", {
             fsMap,
             // biome-ignore lint/suspicious/noExplicitAny: <explanation>
             tsModule: ts as any,
