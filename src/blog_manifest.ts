@@ -7,6 +7,12 @@ export interface BlogManifestPost {
 
 export const BLOG_MANIFEST: BlogManifestPost[] = [
     {
+        slug: "running-ts-on-websites",
+        title: "Running TypeScript on Websites",
+        description: "Using TypeScript on the frontend.",
+        tags: ["typescript"],
+    },
+    {
         slug: "exhaustive-switch-case",
         title: "Exhaustive Switch Case",
         description: "Using never to assert things.",

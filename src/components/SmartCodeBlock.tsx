@@ -54,7 +54,7 @@ export default function CodeBlock(props: CodeBlockProps) {
                             className="opacity-50 text-xs border border-white hover:bg-white hover:text-black rounded p-1"
                             onClick={() => setShowHidden((v) => !v)}
                         >
-                            {showHidden ? "Show All" : "Collapse"}
+                            {showHidden ? "Collapse" : "Show All"}
                         </button>
                     )}
                 </div>

@@ -17,7 +17,7 @@ export default function GenericCodeBlock(props: GenericCodeBlockProps) {
     const highlighted = hljs.highlight(trimmedCode, { language: language ?? "typescript" });
 
     return (
-        <pre className="overflow-x-auto">
+        <pre className="overflow-x-auto text-sm">
             {/* biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation> */}
             <code dangerouslySetInnerHTML={{ __html: highlighted.value }} />
         </pre>

@@ -23,7 +23,7 @@ export default function PostLayout(props: { children: React.ReactNode }) {
             </div>
             <hr />
 
-            <div className="flex flex-col gap-4">{props.children}</div>
+            <div className="flex flex-col gap-4 mb-[10rem]">{props.children}</div>
         </div>
     );
 }
