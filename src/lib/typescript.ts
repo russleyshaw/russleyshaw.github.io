@@ -1,5 +1,3 @@
-"use client";
-
 import { createDefaultMapFromCDN, createSystem, createVirtualCompilerHost } from "@typescript/vfs";
 import ts from "typescript";
 import lzstring from "lz-string";

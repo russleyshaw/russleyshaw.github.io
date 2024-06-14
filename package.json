@@ -21,6 +21,7 @@
     "@mdx-js/react": "^3.0.1",
     "@next/mdx": "^14.2.4",
     "@types/mdx": "^2.0.13",
+    "@typescript/vfs": "^1.5.3",
     "date-fns": "^3.6.0",
     "framer-motion": "^11.2.0",
     "highlight.js": "^11.9.0",
