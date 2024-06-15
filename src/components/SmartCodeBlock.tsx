@@ -5,7 +5,7 @@ import GenericCodeBlock from "./GenericCodeBlock";
 
 import { getTypeScriptErrors } from "../lib/typescript";
 import { useState } from "react";
-import { copyToClipboard } from "../lib/clipboard";
+import TagButton from "./TagButton";
 
 export interface CodeBlockProps {
     filename?: string;
@@ -21,7 +21,6 @@ export default function CodeBlock(props: CodeBlockProps) {
     const result = parseTsBlock(code);
 
     const [showHidden, setShowHidden] = useState(false);
-    const [copied, setCopied] = useState(false);
     const shownCode = showHidden ? code : result.code;
 
     const shouldCompile = isTypeScript && result.tsCheck;
@@ -30,46 +29,24 @@ export default function CodeBlock(props: CodeBlockProps) {
         return getTypeScriptErrors(code ?? "");
     }, [shouldCompile, code]);
     return (
-        <div className="flex flex-col bg-black/10 p-2 rounded-sm gap-2">
-            <div className="flex flex-row justify-between gap-1">
-                <div className="flex flex-row gap-1">
-                    {result.filename && <span className="text-gray-500">{result.filename}</span>}
-                </div>
-
-                <div className="flex flex-row gap-1">
-                    <button
-                        type="button"
-                        className="opacity-50 text-xs border border-white hover:bg-white hover:text-black rounded p-1"
-                        onClick={() => {
-                            copyToClipboard(shownCode);
-                            setCopied(true);
-                            setTimeout(() => setCopied(false), 2000);
-                        }}
-                    >
-                        {copied ? "Copied!" : "Copy"}
-                    </button>
-                    {result.totalHidden > 0 && (
-                        <button
-                            type="button"
-                            className="opacity-50 text-xs border border-white hover:bg-white hover:text-black rounded p-1"
-                            onClick={() => setShowHidden((v) => !v)}
-                        >
-                            {showHidden ? "Collapse" : "Show All"}
-                        </button>
-                    )}
-                </div>
-            </div>
-
-            <hr className="opacity-25" />
-
-            <GenericCodeBlock code={shownCode} language={language} />
-
-            <CodeBlockCompileStatus
-                compilable={shouldCompile}
-                loading={tsErrors.loading}
-                errors={tsErrors.value}
-            />
-        </div>
+        <GenericCodeBlock
+            actions={
+                result.totalHidden > 0 && (
+                    <TagButton onClick={() => setShowHidden((v) => !v)}>
+                        {showHidden ? "Collapse" : "Show All"}
+                    </TagButton>
+                )
+            }
+            code={shownCode}
+            language={language}
+            footer={
+                <CodeBlockCompileStatus
+                    compilable={shouldCompile}
+                    loading={tsErrors.loading}
+                    errors={tsErrors.value}
+                />
+            }
+        />
     );
 }
 
