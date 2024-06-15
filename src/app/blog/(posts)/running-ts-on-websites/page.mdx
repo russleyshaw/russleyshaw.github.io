@@ -16,15 +16,15 @@ console.log(x);
 x = "whooops";
 ```
 
-This is an example of a TypeScript snippet that we can compile in the browser and get the errors back.
-
-In the case above, the typescript checking can be enabled by adding `// tscheck` at the top of the file. Clicking the `Show All` button will display the hidden tooling comments.
+This is an example of a TypeScript snippet that we can compile in the browser and get the errors back. In the case above, the typescript checking can be enabled by adding `// tscheck` at the top of the file. Clicking the `Show All` button will display the hidden tooling comments.
 
 # Starting With Basics
 
-First we need to start some basic usage of the TypeScript compiler via its API.
+First we need to start some basic usage of the TypeScript compiler via its API. We can simplify some sample code on the page, [Using the Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API), to get started. This means we can run our mini-compiler and see that we got an error. Generally, we need to:
 
-We can simplify some sample code on the page, [Using the Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API), to get started.
+1. create a program (setup)
+2. then emit it (compilation)
+3. and finally get the diagnostics (errors).
 
 ```ts
 // filename basic-tsc.ts
@@ -50,19 +50,9 @@ function compile(fileNames: string[]): void {
 compile(["index.ts"]);
 ```
 
-This means we can run our mini-compiler and see that we got an error. Generally, we need to:
-
-1. create a program (setup)
-2. then emit it (compilation)
-3. and finally get the diagnostics (errors).
-
 # 'Files' on the Web
 
-A major difference between the TypeScript compiler `tsc` and the TypeScript playground is `tsc` reads files from our filesystem, whereas the playground is just supplied a string of our code.
-
-Fortunately the TS devs thought of this and created a way for us to supply 'virtual' files to the compiler.
-
-This library is called [@typescript/vfs](https://www.typescriptlang.org/dev/typescript-vfs/). It performs two important actions for us: it creates a virtual file system (our code strings) and a virtual compiler host (our libs).
+A major difference between the TypeScript compiler `tsc` and the TypeScript playground is `tsc` reads files from our filesystem, whereas the playground is just supplied a string of our code. Fortunately the TS devs thought of this and created a way for us to supply 'virtual' files to the compiler. This library is called [@typescript/vfs](https://www.typescriptlang.org/dev/typescript-vfs/). It performs two important actions for us: it creates a virtual file system (our code strings) and a virtual compiler host (our libs).
 
 # Using the TypeScript CDN
 

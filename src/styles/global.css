@@ -12,11 +12,11 @@ body,
 }
 
 body {
-  @apply bg-stone-900 text-white;
+  @apply bg-stone-900 text-gray-200;
 }
 
 a {
-  @apply underline text-fuchsia-500;
+  @apply underline text-fuchsia-600;
 }
 
 h1 {
@@ -56,5 +56,27 @@ h2 a {
   @apply no-underline hover:underline mr-2;
   &:before {
     content: "#";
+  }
+}
+
+.blog-content {
+  h1 {
+    @apply text-2xl font-bold;
+  }
+
+  h2 {
+    @apply text-xl font-bold;
+  }
+
+  h3 {
+    @apply text-lg font-bold;
+  }
+
+  h4 {
+    @apply font-bold;
+  }
+
+  p {
+    @apply leading-loose indent-8 text-justify;
   }
 }
