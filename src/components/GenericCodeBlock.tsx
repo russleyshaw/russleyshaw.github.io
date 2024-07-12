@@ -3,7 +3,7 @@ import "../lib/highlight";
 import "highlight.js/styles/github-dark.css";
 import hljs from "highlight.js";
 
-import { trimLines } from "../lib/string";
+import { splitLines, trimLines } from "../lib/string";
 import { useState } from "react";
 import { copyToClipboard } from "../lib/clipboard";
 import TagButton from "./TagButton";
@@ -62,7 +62,7 @@ export default function GenericCodeBlock(props: GenericCodeBlockProps) {
     }
 
     const syntaxHighlighted = hljs.highlight(trimmedCode, { language: language ?? "typescript" });
-    const syntaxHighlightedLines = syntaxHighlighted.value.split("\n");
+    const syntaxHighlightedLines = splitLines(syntaxHighlighted.value);
     for (let i = 0; i < syntaxHighlightedLines.length; i++) {
         if (highlightedLines.has(i)) {
             syntaxHighlightedLines[i] =
@@ -80,7 +80,7 @@ export default function GenericCodeBlock(props: GenericCodeBlockProps) {
 
     const newHighlighted = syntaxHighlightedLines
         .filter((_l, idx) => showRaw || !hiddenLines.has(idx))
-        .join("");
+        .join("\n");
 
     return (
         <div className="flex flex-col bg-black/10 p-4 shadow rounded-lg gap-2 border border-black">

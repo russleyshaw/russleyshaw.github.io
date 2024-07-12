@@ -14,3 +14,7 @@ export function codeToTsPlaygroundUrl(code: string) {
     const url = `https://www.typescriptlang.org/play?#code/${encoded}`;
     return url;
 }
+
+export function splitLines(value: string) {
+    return value.split(/\r\n|\r|\n/);
+}
