@@ -76,7 +76,7 @@ There are two main ways to use `useEffect`:
     -   Fetching data, logging changes, calling a callback.
 
 ```tsx
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 
 function MyComponent(props: { userId: number }) {
     const [username, setUsername] = useState("");
@@ -217,7 +217,8 @@ function useAsyncPolling<T>({
 We know there are two important pieces of state we need tor return: the result and if we are currently polling. We can use the `useState` hook to create these. We can define our `pending` state simply as if we have a result or not.
 
 ```tsx
-import {} from "react";
+// highlight 1
+import { useState } from "react";
 
 interface HookArgs<T> {
     // added 1-5
@@ -256,7 +257,9 @@ function useAsyncPolling<T>({
 Its important to compose hooks together and avoiding writing code that has already been written. We can use the `useInterval` hook from `react-use` to call our polling function at a regular interval. This hook will call a function at a regular interval and can be stopped. `useInterval` accepts a function to call and an interval duration. **Note that the interval duration can be `null` to stop the interval.**
 
 ```tsx
-import {} from "react";
+import { useState } from "react";
+// added 1
+import { useInterval } from "react-use";
 
 interface HookArgs<T> {
     pollFn: () => Promise<T>;
@@ -311,7 +314,9 @@ function useAsyncPolling<T>({
 We should reset the result when the dependencies change. This will allow the hook to start polling again when the dependencies change. We can use the `useEffect` hook to reset the result when the dependencies change.
 
 ```tsx
-import {} from "react";
+// highlight 1
+import { useState, useEffect } from "react";
+import { useInterval } from "react-use";
 
 interface HookArgs<T> {
     pollFn: () => Promise<T>;
