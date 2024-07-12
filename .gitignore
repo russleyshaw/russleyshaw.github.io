@@ -4,3 +4,5 @@ stats.html
 .next/
 # Million Lint
 .million
+
+.vercel
