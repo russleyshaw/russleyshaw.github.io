@@ -16,6 +16,13 @@ export enum Tag {
 
 export const BLOG_MANIFEST: BlogManifestPost[] = [
     {
+        slug: "writing-a-polling-react-hook",
+        title: "Writing a Polling React Hook",
+        description: "Composing React Hooks to create an easy solution to retrieving polled data.",
+        tags: [Tag.TS],
+        createdAt: new Date("2024-07-12"),
+    },
+    {
         slug: "running-ts-on-websites",
         title: "Running TypeScript on Websites",
         description: "Using TypeScript on the frontend.",

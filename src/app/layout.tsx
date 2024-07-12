@@ -13,6 +13,15 @@ export default function RootLayout(props: {
 }) {
     return (
         <html lang="en">
+            <head>
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+                <link
+                    href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&display=swap"
+                    rel="stylesheet"
+                />
+            </head>
+
             <body className="p-4 flex flex-col gap-4">
                 <SpeedInsights />
                 <div className="flex flex-row items-center gap-4">

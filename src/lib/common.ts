@@ -22,3 +22,32 @@ export function toggleSet<T>(set: Set<T>, value: T) {
 
     return set;
 }
+
+export function maybeParseInt(value: string) {
+    const parsed = Number.parseInt(value, 10);
+    return Number.isNaN(parsed) ? undefined : parsed;
+}
+
+export function expectParseInt(value: string) {
+    const parsed = Number.parseInt(value, 10);
+    if (Number.isNaN(parsed)) {
+        throw new Error(`Could not parse integer from "${value}"`);
+    }
+
+    return parsed;
+}
+
+export function setAdd<T>(set: Set<T>, ...values: T[]) {
+    for (const value of values) {
+        set.add(value);
+    }
+    return set;
+}
+
+export function expectDefined<T>(value: T | undefined): T {
+    if (value == null) {
+        throw new Error("Expected value to be defined");
+    }
+
+    return value;
+}

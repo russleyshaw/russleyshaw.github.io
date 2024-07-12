@@ -1,6 +1,9 @@
 import type { MDXComponents } from "mdx/types";
-import { Suspense } from "react";
 import CodeBlock from "./components/SmartCodeBlock";
+import Mermaid from "./components/Mermaid";
+
+import Muted from "./components/Muted";
+import Tooltip from "./components/Tooltip";
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
     return {
@@ -10,17 +13,11 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
                 const language = props.children.props.className?.replace("language-", "");
                 const code = props.children.props.children as string;
 
-                return (
-                    <Suspense
-                        fallback={
-                            <pre>
-                                <code>{code}</code>
-                            </pre>
-                        }
-                    >
-                        <CodeBlock code={code} language={language} />
-                    </Suspense>
-                );
+                if (language === "mermaid") {
+                    return <Mermaid code={code} />;
+                }
+
+                return <CodeBlock code={code} language={language} />;
             }
 
             return <pre {...props} />;
@@ -35,5 +32,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
                 </div>
             );
         },
+
+        Muted,
+        Tooltip,
     };
 }
