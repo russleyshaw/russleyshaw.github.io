@@ -9,6 +9,9 @@ export default function () {
             <p>Find me on:</p>
             <ul>
                 <li>
+                    <a href="https://bsky.app/profile/russley.dev">BlueSky</a>
+                </li>
+                <li>
                     <a href="https://github.com/russleyshaw">GitHub</a>
                 </li>
                 <li>
@@ -16,9 +19,6 @@ export default function () {
                 </li>
                 <li>
                     <a href="https://x.com/russleyshaw">X (Formerly Twitter)</a>
-                </li>
-                <li>
-                    <a href="https://bsky.app/russley.dev">BlueSky</a>
                 </li>
             </ul>
         </div>
