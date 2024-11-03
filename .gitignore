@@ -1,8 +1,0 @@
-node_modules/
-dist
-stats.html
-.next/
-# Million Lint
-.million
-
-.vercel
