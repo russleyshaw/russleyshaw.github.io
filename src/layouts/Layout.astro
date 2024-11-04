@@ -1,0 +1,50 @@
+---
+import "../styles/index.css";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&display=swap"
+      rel="stylesheet"
+    />
+
+    <meta name="generator" content={Astro.generator} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <title>{title}</title>
+  </head>
+  <body class="max-w-screen-md mx-auto">
+    <header class="flex flex-row justify-between p-4">
+      <nav class="flex flex-row gap-4">
+        <a href="/">Russley Shaw</a>
+        <a href="/blog">Blog</a>
+        <a href="/projects">Projects</a>
+      </nav>
+      <div class="flex flex-row gap-4">
+        <a href="https://bsky.app/profile/russley.dev" target="_blank"
+          >Bluesky</a
+        >
+        <a href="https://github.com/russleyshaw" target="_blank">GitHub</a>
+        <a href="https://x.com/russleyshaw" target="_blank">X (Twitter)</a>
+        <a href="https://linkedin.com/in/russleyshaw" target="_blank"
+          >LinkedIn</a
+        >
+      </div>
+    </header>
+  </body>
+  <slot />
+</html>

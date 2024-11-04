@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    color-scheme: light dark;
+
+    --bg-color: light-dark(theme("colors.neutral.100"), theme("colors.neutral.900"));
+    --text-color: light-dark(theme("colors.neutral.900"), theme("colors.neutral.100"));
+}
+
+html {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: "Afacad Flux", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 100;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+}
+
+h1 {
+    @apply text-2xl font-bold;
+}
+
+h2 {
+    @apply text-xl font-bold;
+}
+
+h3 {
+    @apply text-lg font-bold;
+}
+
+a {
+    @apply text-fuchsia-500;
+}
+
+a:hover {
+    @apply text-fuchsia-700;
+}
+
+.astro-code {
+    font-size: 10px;
+    padding: 1rem;
+
+    margin: 0;
+    border-radius: 0.2rem;
+}

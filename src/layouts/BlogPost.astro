@@ -1,0 +1,64 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+
+type Props = CollectionEntry<"blog">["data"];
+
+const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+---
+
+<style>
+  .prose {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 10rem;
+
+    p {
+      text-indent: 1.5rem;
+      line-height: 2;
+    }
+
+    code {
+      font-size: 10px;
+    }
+
+    ul {
+      list-style: disc;
+      margin-left: 1.5rem;
+    }
+  }
+</style>
+
+<Layout title={title}>
+  <main>
+    <article>
+      <div class="hero-image">
+        {heroImage && <img width={1020} height={510} src={heroImage} alt="" />}
+      </div>
+      <div class="prose">
+        <div class="title">
+          <div class="date">
+            {pubDate.toLocaleDateString()}
+            {
+              updatedDate && (
+                <div class="last-updated-on">
+                  Last updated on {updatedDate.toLocaleDateString()}
+                </div>
+              )
+            }
+          </div>
+          <h1>{title}</h1>
+          <hr />
+        </div>
+        <slot />
+      </div>
+
+      <div class="flex flex-row justify-center">
+        <hr class="grow" />
+        <a href="#">Return to top</a>
+        <hr class="grow" />
+      </div>
+    </article>
+  </main>
+</Layout>

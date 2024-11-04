@@ -1,0 +1,20 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+const posts = (await getCollection("blog")).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<Layout title="Blog">
+  {
+    posts.map((post) => (
+      <div>
+        <h2>{post.data.title}</h2>
+        <p>{post.data.description}</p>
+        <a href={`/blog/${post.slug}`}>Read more</a>
+      </div>
+    ))
+  }
+</Layout>

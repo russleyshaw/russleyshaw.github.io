@@ -1,0 +1,443 @@
+---
+title: 'Writing A Polling React Hook'
+description: 'Learn how to write a custom React hook to poll an endpoint at a regular interval.'
+pubDate: 'Oct 24 2024'
+---
+
+React Hooks are the modern approach to managing state and side-effects in React components. When hook logic becomes complex, we can encapsulate the logic into a custom hook. Here we will learn about hooks, why we use them, and how to create a custom hook to retrieve data from a polled endpoint.
+
+# Why Hooks?
+
+Early React components were written as class components. State would be stored on the class instance itself, and side-effects were handled in special, overridable methods. Function components became more popular as they were simpler, but had no way to store state. **Hooks are React's solution to allowing state in functional components and are now the preferred way to write React components.**
+
+To someone new to React, hooks might seem complicated, but they are in service of some of the complexities of React. When attempting to store state for a component, we encounter challenges:
+
+-   **Components are just functions.**
+    -   This means that we can't store state in the component itself.
+-   **State is preserved on an instance of the component.**
+    -   Multiple instances of the same component can exist at the same time.
+    -   This rules out global variables and state bound to the function itself.
+-   **State must be preserved between renders of the component.**
+    -   A component can be rendered/called multiple times and shouldn't lose its state.
+    -   This rules out local variables defined in the function, as a rerender would reset them.
+
+As a result of these limitations we are left with hooks. Specifically, hooks keep track of state by storing it keyed by the component's location in the component tree. React has several built-in/core hooks that serve as the foundation for other hooks. We'll look at a few.
+
+# Hooks Basics
+
+## Use State
+
+Many components are stateless, but some have some internal state. This internal state is useful to encapsulate component logic. We use the built-in `useState` hook to create state variables. [React Docs](https://react.dev/reference/react/useState)
+
+```tsx
+import { useState } from "react";
+
+function MyComponent() {
+    // Create a state variable with an initial value
+    const [value, setValue] = useState(initialValue);
+
+    function reset() {
+        // value = 0; ⛔
+        // Don't try setting the value directly, it won't work.
+        // Use the setter function instead.
+
+        // Provide a value directly
+        setValue(0);
+    }
+
+    function increment() {
+        // Or use an updater function
+        setValue((p) => p + 1);
+    }
+
+    return (
+        <>
+            <div>Value: {value}</div>
+            <button onClick={increment}>Increment</button>
+            <button onClick={reset}>Reset</button>
+        </>
+    );
+}
+```
+
+## Use Effect
+
+Sometimes we want to perform an action when something changes in our component. This could be fetching data, logging changes, or calling a callback. We use the `useEffect` built-in hook to run side-effects in our components. **With `useEffect`, we provide a function to run and an array of dependencies. The function will run whenever the dependencies change.** [React Docs](https://react.dev/reference/react/useEffect)
+
+There are two main ways to use `useEffect`:
+
+-   **Run once on mount.**
+    -   Pass an empty dependency array.
+    -   Setup and teardown logic, like event listeners.
+-   **Run whenever a dependency changes.**
+    -   Pass an array of dependencies.
+    -   Fetching data, logging changes, calling a callback.
+
+```tsx
+import { useState, useEffect } from "react";
+
+function MyComponent(props: { userId: number }) {
+    const [username, setUsername] = useState("");
+
+    // Empty dependency array means run once on mount
+    useEffect(() => {
+        console.log("Component mounted");
+
+        // Optional
+        return () => {
+            console.log("Component unmounted");
+        };
+    }, []);
+
+    // Runs whenever the dependency changes
+    useEffect(() => {
+        console.log("User ID changed. Fetching new user");
+
+        fetchUser(userId).then(async (user) => {
+            console.log("User fetched");
+            setUsername(user.username);
+        });
+    }, [userId]);
+
+    return <div>Username: {username}</div>;
+}
+```
+
+## Other Hooks
+
+There are several different built-in hooks. Not all are common, but likely you will come across:
+
+-   [`useRef`](https://react.dev/reference/react/useRef) - Reference a value that’s not needed for rendering.
+-   [`useContext`](https://react.dev/reference/react/useContext) - Read and subscribe to context from your component.
+
+You can use 3rd party hooks from libraries like `react-use`. In the next section, we will use the [`useInterval`](https://github.com/streamich/react-use/blob/HEAD/docs/useInterval.md) hook from `react-use` to create a polling hook.
+
+We can also write our own by combining existing hooks.
+
+## Combining hooks
+
+In essence, complex hooks are just functions that use other hooks. We can create higher level logic using both other built-in hooks, custom hooks and even 3rd party libraries.
+
+```tsx
+function useCounter() {
+    const [count, setCount] = useState(0);
+
+    function increment() {
+        setCount(count + 1);
+    }
+
+    useEffect(() => {
+        console.log("Count changed to", count);
+    }, [count]);
+
+    return { count, increment };
+}
+```
+
+# Writing A Polling Hook
+
+We want to create a hook that will poll a function at a regular interval. The hook should regularly poll some async resource and stop when a condition is met. For example, this could be polling a server for a status until it is `complete`.
+
+## The Setup
+
+Let's start with a skeleton. We have some inputs, some outputs, and the hook itself. Lets call our hook `useAsyncPolling`.
+
+```tsx
+import {} from "react";
+
+interface HookArgs<T> {
+    // Our inputs
+}
+
+interface HookResult<T> {
+    // Our outputs
+}
+
+function useAsyncPolling<T>({}: HookArgs<T>): HookResult<T> {
+    // Our hook logic
+
+    return {};
+}
+```
+
+We should start by thinking about the inputs and outputs of our hook. We want to provide:
+
+-   **A function to poll.**
+    -   This function should return a promise.
+-   **An interval duration.**
+-   **A stop condition.**
+    -   This function should return `true` when the polling should stop.
+-   **An optional running flag.**
+    -   This flag can be used to start and stop the polling.
+-   **Dependencies.**
+    -   The hook should reset the result and polling when these change.
+
+And for a return value:
+
+-   **The result of the polling.**
+-   **A flag indicating if we are polling.**
+
+```tsx
+import {} from "react";
+
+interface HookArgs<T> {
+    // added 1-5
+    pollFn: () => Promise<T>;
+    intervalMs: number | null;
+    stopFn: (t: T) => boolean;
+    running?: boolean;
+    dependencies: unknown[];
+}
+
+interface HookResult<T> {
+    // added 1-2
+    result: T | null;
+    pending: boolean;
+}
+
+function useAsyncPolling<T>({
+    // highlight 1-5
+    pollFn,
+    intervalMs,
+    stopCondition,
+    running,
+    dependencies,
+}: HookArgs<T>): HookResult<T> {
+    // Our hook logic
+
+    // highlight 1
+    return { result: null, pending: false };
+}
+```
+
+## Adding State
+
+We know there are two important pieces of state we need tor return: the result and if we are currently polling. We can use the `useState` hook to create these. We can define our `pending` state simply as if we have a result or not.
+
+```tsx
+// highlight 1
+import { useState } from "react";
+
+interface HookArgs<T> {
+    // added 1-5
+    pollFn: () => Promise<T>;
+    intervalMs: number | null;
+    stopFn: (t: T) => boolean;
+    running?: boolean;
+    dependencies: unknown[];
+}
+
+interface HookResult<T> {
+    // added 1-2
+    result: T | null;
+    pending: boolean;
+}
+
+function useAsyncPolling<T>({
+    pollFn,
+    intervalMs,
+    stopCondition,
+    running,
+    dependencies,
+}: HookArgs<T>): HookResult<T> {
+    // added 1
+    const [result, setResult] = useState<T | null>(null);
+    // added 1
+    const pending = result == null;
+
+    // highlight 1
+    return { result, pending };
+}
+```
+
+## Calling The Interval
+
+Its important to compose hooks together and avoiding writing code that has already been written. We can use the `useInterval` hook from `react-use` to call our polling function at a regular interval. This hook will call a function at a regular interval and can be stopped. `useInterval` accepts a function to call and an interval duration. **Note that the interval duration can be `null` to stop the interval.**
+
+```tsx
+import { useState } from "react";
+// added 1
+import { useInterval } from "react-use";
+
+interface HookArgs<T> {
+    pollFn: () => Promise<T>;
+    intervalMs: number | null;
+    stopFn: (t: T) => boolean;
+    running?: boolean;
+    dependencies: unknown[];
+}
+
+interface HookResult<T> {
+    result: T | null;
+    pending: boolean;
+}
+
+function useAsyncPolling<T>({
+    pollFn,
+    intervalMs,
+    stopCondition,
+    running,
+    dependencies,
+}: HookArgs<T>): HookResult<T> {
+    const [result, setResult] = useState<T | null>(null);
+    // added 1
+    const [awaiting, setAwaiting] = useState(false);
+    const pending = result == null;
+
+    // added 1-2
+    // Null interval duration means don't run
+    const interval = pending && (running ?? true) ? intervalMs : null;
+
+    // added 1-13
+    useInterval(async () => {
+        // Make sure the async function is not already being awaited
+        if (awaiting) return;
+        setAwaiting(true);
+
+        const value = await pollFn();
+        setAwaiting(false);
+
+        const stop = stopCondition(value);
+        if (stop) {
+            setResult(value);
+        }
+    }, interval);
+
+    return { result, pending };
+}
+```
+
+## Resetting The Result
+
+We should reset the result when the dependencies change. This will allow the hook to start polling again when the dependencies change. We can use the `useEffect` hook to reset the result when the dependencies change.
+
+```tsx
+// highlight 1
+import { useState, useEffect } from "react";
+import { useInterval } from "react-use";
+
+interface HookArgs<T> {
+    pollFn: () => Promise<T>;
+    intervalMs: number | null;
+    stopFn: (t: T) => boolean;
+    running?: boolean;
+    dependencies: unknown[];
+}
+
+interface HookResult<T> {
+    result: T | null;
+    pending: boolean;
+}
+
+function useAsyncPolling<T>({
+    pollFn,
+    intervalMs,
+    stopCondition,
+    running,
+    dependencies,
+}: HookArgs<T>): HookResult<T> {
+    const [result, setResult] = useState<T | null>(null);
+    const [awaiting, setAwaiting] = useState(false);
+    const pending = result == null;
+
+    // Null interval duration means don't run
+    const interval = pending && (running ?? true) ? intervalMs : null;
+
+    useInterval(async () => {
+        // Make sure the async function is not already being awaited
+        if (awaiting) return;
+        setAwaiting(true);
+
+        const value = await pollFn();
+        setAwaiting(false);
+
+        const stop = stopCondition(value);
+        if (stop) {
+            setResult(value);
+        }
+    }, interval);
+
+    // added 1-4
+    // Reset result on deps change.
+    useEffect(() => {
+        setResult(null);
+    }, dependencies);
+
+    return { result, pending };
+}
+```
+
+## Handling function changes
+
+One tricky part about hooks is that often functions are passed as dependencies and can change between renders. As we have it now, the function `fn` and `stopCondition` are bound to the versions we initially pass in to the use interval. This can create unintended issues, such as using difference values in the functions on future render and not seeing that update. To avoid this, we can use a `useRef` to store the function without triggering rerenders. We are telling React _"this is the function we want to use, don't update it"_. This is a common pattern when dealing with functions in hooks.
+
+```tsx
+import { useEffect, useRef, useState } from "react";
+import { useInterval } from "react-use";
+
+interface HookArgs<T> {
+    pollFn: () => Promise<T>;
+    intervalMs: number | null;
+    stopFn: (t: T) => boolean;
+    running?: boolean;
+    dependencies: unknown[];
+}
+
+interface HookResult<T> {
+    result: T | null;
+    pending: boolean;
+}
+
+function useAsyncPolling<T>({
+    pollFn,
+    intervalMs,
+    stopCondition,
+    running,
+    dependencies,
+}: HookArgs<T>) {
+    const [result, setResult] = useState<T | null>(null);
+    const [awaiting, setAwaiting] = useState(false);
+    const pending = result == null;
+
+    // added 1-2
+    const pollFnRef = useRef(pollFn);
+    pollFnRef.current = pollFn;
+
+    // added 1-2
+    const stopConditionRef = useRef(stopCondition);
+    stopConditionRef.current = stopCondition;
+
+    // Null interval duration means don't run
+    const interval = pending && (running ?? true) ? intervalMs : null;
+
+    useInterval(async () => {
+        // Make sure the async function is not already being awaited
+        if (awaiting) return;
+        setAwaiting(true);
+        // highlight 1
+        const value = await pollFnRef.current();
+        setAwaiting(false);
+        // highlight 1
+        const stop = stopConditionRef.current(value);
+        if (stop) {
+            setResult(value);
+        }
+    }, interval);
+
+    // Reset result on deps change.
+    useEffect(() => {
+        setResult(null);
+    }, dependencies);
+
+    return { result, pending };
+}
+```
+
+## Error handling
+
+Error handling is left as an exercise for the reader 🙂
+
+## More Reading
+
+-   [React Docs - Hooks](https://react.dev/learn/managing-state)
+-   [Making setInterval Declarative with React Hooks - Dan Abramov](https://overreacted.io/making-setinterval-declarative-with-react-hooks/)
