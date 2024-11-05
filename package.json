@@ -27,5 +27,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4"
+  },
+  "volta": {
+    "node": "20.18.0"
   }
 }
