@@ -7,7 +7,7 @@ const posts = (await getCollection("blog")).sort(
 );
 ---
 
-<Layout title="Blog">
+<Layout title="Blog" description="Russley Shaw's blog.">
   {
     posts.map((post) => (
       <div>
