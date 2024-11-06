@@ -1,18 +1,27 @@
 ---
 import "../styles/index.css";
+import type { Props as MetaProps } from "../components/Meta.astro";
+import Meta from "../components/Meta.astro";
 
-interface Props {
-  title: string;
-}
+interface Props extends MetaProps {}
 
-const { title } = Astro.props;
+const { title, description, author, keywords } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content="Astro description" />
+
+    <Meta {...Astro.props} />
+
+    <title>{title}</title>
+    <meta name="og:title" content={title} />
+
+    {description && <meta name="description" content={description} />}
+    {author && <meta name="author" content={author} />}
+    {keywords && <meta name="keywords" content={keywords.join(", ")} />}
+
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
@@ -25,7 +34,6 @@ const { title } = Astro.props;
 
     <meta name="generator" content={Astro.generator} />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <title>{title}</title>
   </head>
   <body class="max-w-screen-md mx-auto">
     <header class="flex flex-row justify-between p-4">
@@ -45,6 +53,5 @@ const { title } = Astro.props;
         >
       </div>
     </header>
-  </body>
-  <slot />
+  </body><slot />
 </html>

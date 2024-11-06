@@ -4,7 +4,8 @@ import Layout from "../layouts/Layout.astro";
 
 type Props = CollectionEntry<"blog">["data"];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, keywords } =
+  Astro.props;
 ---
 
 <style>
@@ -30,7 +31,16 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
   }
 </style>
 
-<Layout title={title}>
+<Layout
+  title={title}
+  description={description}
+  type="article"
+  image={heroImage}
+  published={pubDate}
+  modified={updatedDate}
+  keywords={keywords}
+  author="Russley Shaw"
+>
   <main>
     <article>
       <div class="hero-image">

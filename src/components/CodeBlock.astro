@@ -1,0 +1,25 @@
+---
+import { splitLines } from "../lib/string";
+
+interface CodeLine {
+  text: string;
+  isAdded: boolean;
+  isRemoved: boolean;
+  isModified: boolean;
+
+  isHidden: boolean;
+}
+
+export interface Props {
+  code: string;
+}
+
+const lines: CodeLine[] = [];
+
+for (const line of splitLines(Astro.props.code)) {
+}
+---
+
+<pre>
+    {lines.map((line) => <span>{line.text}</span>)}
+</pre>
